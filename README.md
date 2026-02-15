@@ -1,99 +1,49 @@
-# Flowni
+<a href="https://flowni.vercel.app">
+  <img alt="Open source product management platform." src="./apps/web/public/preview/flowni.png">
+  <h1 align="center">Flowni</h1>
+</a>
 
+<p align="center">
+  Open Source Product Management Platform Built with Next.js, Supabase and AI SDK.
+</p>
 
+<p align="center">
+  <a href="#features"><strong>Features</strong></a> ·
+  <a href="#model-provider"><strong>Model provider</strong></a> 
+  <a href="#deploy-your-own"><strong>Deploy your own</strong></a> ·
+  <a href="#running-locally"><strong>Running locally</strong></a>
+</p>
+<br/>
 
-Flowni is an open source product management platform. It is a simple alternative to tools like Productboard and Cycle. Bring your product team together to explore problems, ideate solutions, prioritize features and plan roadmaps with the help of AI.
+## Features
 
-Structurally, Flowni is a monorepo built on [`next-forge`](https://www.next-forge.com) - a production-grade Turborepo template for Next.js apps.
+- [Next.js](https://nextjs.org) App Router with multiple apps for `app`, `api`, `web`, and `portal`
+- [Turborepo](https://turbo.build/repo) monorepo powered by [`next-forge`](https://www.next-forge.com)
+- [Drizzle](https://orm.drizzle.team/) + [Better Auth](https://www.better-auth.com/) backend package
+- Rich text editor with Novel and TipTap plus an Excalidraw canvas package
+- Design system built on [shadcn/ui](https://ui.shadcn.com), [Tailwind CSS](https://tailwindcss.com), and [Radix UI](https://radix-ui.com)
 
-## Setup
+## Model Providers
 
-### Prerequisites
+This app uses [Openai](https://openai.com/) as the default provider via the [AI SDK](https://sdk.vercel.ai/docs). You can switch LLM providers to [Ollama](https://ollama.com), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [many more](https://sdk.vercel.ai/providers/ai-sdk-providers) with just a few lines of code.
 
-- Mac, Linux or Windows
-- [Node.js](https://nodejs.org/en/download/) v20 or higher
-- [Bun](https://bun.sh/)
+## Deploy your own
 
-### Environment Variables
+Flowni is designed to be deployed on Vercel. Create 4 projects (`app`, `api`, `web`, `portal`) and set the Root Directory to the app you are deploying (for example `apps/app`). Then add the required environment variables and deploy.
 
-Flowni uses next-forge's [environment variables](https://docs.next-forge.com/setup/env) architecture to manage secrets, where each package manages its own environment variables. These environment variables are exported and composed into each app's `env.ts` file.
+## Running locally
 
-Each relevant app has an `.env.example` file that you can use as a reference. Simply copy the `.env.example` file to `.env.local` and fill in the missing values.
+You will need to use the environment variables [defined in `.env.example`](.env.example) to run Fragmenta. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
 
-### Development
+> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various Convex and authentication provider accounts.
 
-After cloning the repo, install the dependencies with:
+1. Install Vercel CLI: `npm i -g vercel`
+2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
+3. Download your environment variables: `vercel env pull`
 
-```sh
-bun install
+```bash
+npm install
+npm run dev
 ```
 
-Then, run the development server with:
-
-```sh
-bun dev
-```
-
-Open the localhost URLs with the relevant ports listed below.
-
-## Structure
-
-`next-forge` is a monorepo, which means it contains multiple packages in a single repository. This is a common pattern for modern web applications, as it allows you to share code between different parts of the application, and manage them all together.
-
-The monorepo is managed by [Turborepo](https://turbo.build/repo), which is a tool for managing monorepos. It provides a simple way to manage multiple packages in a single repository, and is designed to work with modern web applications.
-
-### Apps
-
-The monorepo contains the following apps:
-
-| App | Description | URL |
-| --- | ----------- | --- |
-| `adf-validator` | The ADF validator, which helps validate Atlassian Document Format (ADF) schemas. | - |
-| `api` | The API, which contains serverless functions designed to run separately from the main app e.g. webhooks and cron jobs. | [localhost:3004](http://localhost:3004/) |
-| `app` | The main, which contains the Next.js app. | [localhost:3000](http://localhost:3000/) |
-| `portal` | The customer-facing portal. | [localhost:3001](http://localhost:3001/) |
-| `web` | The website, which contains the static website for the app e.g. marketing pages and legal docs. | [localhost:3002](http://localhost:3002/) |
-
-### Packages
-
-It also contains the following packages:
-
-| Package | Description |
-| --- | ----------- |
-| `analytics` | The analytics library, including Vercel Analytics, PostHog and Google Analytics. |
-| `atlassian` | An OpenAPI client for the Atlassian API. |
-| `backend` | The backend powered by Drizzle and Better Auth. |
-| `canvas` | The Excalidraw canvas. |
-| `design-system` | The design system, powered by shadcn/ui. |
-| `editor` | The rich text editor, powered by Novel and TipTap. |
-| `email` | The email provider, powered by Resend. |
-| `lib` | Various utility functions and types. |
-| `next-config` | Shared Next.js configuration for the apps. |
-| `observability` | The observability library, including Sentry. |
-| `seo` | Utility functions for SEO. |
-| `typescript-config` | The TypeScript configuration, which contains the shared TypeScript configuration for the app. |
-| `widget` | The core functionality for the embeddable Flowni widget. |
-
-## Deploying
-
-Flowni is designed to be deployed on Vercel. To deploy Flowni on Vercel, you need to create 4 new projects:
-
-- `app`
-- `api`
-- `web`
-- `portal`
-
-After selecting your repository, change the Root Directory option to the app of choice e.g. `apps/app`. This should automatically detect the Next.js setup and as such, the build command and output directory.
-
-Then, add all your environment variables to the project. Finally, just hit "Deploy" and Vercel will take care of the rest!
-
-### Environment variables
-
-If you're deploying on Vercel, we recommend making use of the Team Environment Variables feature. Variables used by libraries need to exist in all packages and duplicating them can be a headache. Learn more about how [environment variables](https://docs.next-forge.com/setup/env) work in next-forge.
-
-### Integrations
-
-Flowni makes use of the following integrations to sync environment variables:
-
-- [Supabase](https://vercel.com/marketplace/supabase)
-- [Sentry](https://vercel.com/marketplace/sentry)
+Your app should now be running on [localhost:3000](http://localhost:3000/).
