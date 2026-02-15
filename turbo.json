@@ -1,0 +1,25 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "envMode": "strict",
+  "ui": "stream",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", ".env.*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "types.d.ts"]
+    },
+    "dev": {
+      "dependsOn": ["^dev"],
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "analyze": {
+      "cache": false
+    },
+    "type-check": {
+      "dependsOn": ["^type-check"]
+    }
+  }
+}
