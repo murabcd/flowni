@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "ignoreCommand": "node scripts/skip-ci.js",
+  "crons": [
+    {
+      "path": "/cron/atlassian/token",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/cron/atlassian/webhook",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/cron/digest",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/cron/import",
+      "schedule": "*/10 * * * *"
+    }
+  ]
+}
