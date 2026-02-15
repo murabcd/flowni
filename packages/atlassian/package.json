@@ -1,0 +1,18 @@
+{
+  "name": "@repo/atlassian",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build",
+    "build": "npx -y openapi-typescript@7.12.0 https://developer.atlassian.com/cloud/jira/platform/swagger.v3.json -o ./types.d.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.14.0"
+  }
+}
