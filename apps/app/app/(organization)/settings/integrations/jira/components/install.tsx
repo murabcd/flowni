@@ -1,0 +1,111 @@
+import { currentOrganizationId } from "@repo/backend/auth/utils";
+import { database, tables } from "@repo/backend/database";
+import { Prose } from "@repo/design-system/components/prose";
+import { StackCard } from "@repo/design-system/components/stack-card";
+import { eq } from "drizzle-orm";
+import { env } from "@/env";
+import { JiraInstallationForm } from "./install-form";
+
+export const InstallJira = async () => {
+  const organizationId = await currentOrganizationId();
+
+  if (!organizationId) {
+    throw new Error("Organization not found");
+  }
+
+  const databaseOrganization = await database
+    .select({ slug: tables.organization.slug })
+    .from(tables.organization)
+    .where(eq(tables.organization.id, organizationId))
+    .limit(1)
+    .then((rows) => rows[0] ?? null);
+
+  if (!databaseOrganization) {
+    throw new Error("Organization not found");
+  }
+
+  const webhookUrl = new URL(
+    `/webhooks/jira/${databaseOrganization.slug}`,
+    env.FLOWNI_API_URL
+  );
+
+  return (
+    <>
+      <div className="grid gap-2">
+        <h1 className="m-0 font-semibold text-4xl tracking-tight">
+          Install Jira
+        </h1>
+        <p className="mt-2 mb-0 text-muted-foreground">
+          Follow the steps below to integrate Jira with Flowni. This assumes you
+          already have a Atlassian account. If you don&apos;t, head to the{" "}
+          <a
+            className="text-primary underline"
+            href="https://www.atlassian.com/try/cloud/signup"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Atlassian signup page
+          </a>
+          .
+        </p>
+      </div>
+      <StackCard title="1. Create a webhook">
+        <Prose className="max-w-none">
+          <p>
+            Head to the "WebHooks" page in your Atlassian account settings. The
+            URL looks like this:
+          </p>
+
+          <div className="rounded-md bg-secondary px-4 py-3">
+            <p>https://flowni.atlassian.net/plugins/servlet/webhooks</p>
+          </div>
+
+          <p>
+            Create a new webhook with the name "Flowni" and the following
+            endpoint URL:
+          </p>
+
+          <div className="rounded-md bg-secondary px-4 py-3">
+            <p>{webhookUrl.toString()}</p>
+          </div>
+
+          <p>Then, select the following "Issue related events":</p>
+          <ul>
+            <li>
+              <code>Issue updated</code>
+            </li>
+            <li>
+              <code>Issue deleted</code>
+            </li>
+          </ul>
+
+          <p>Then click "Create".</p>
+        </Prose>
+      </StackCard>
+      <StackCard title="2. Create a new API token">
+        <Prose className="max-w-none">
+          <p>
+            Head to the{" "}
+            <a
+              className="text-primary underline"
+              href="https://id.atlassian.com/manage-profile/security/api-tokens"
+              rel="noreferrer"
+              target="_blank"
+            >
+              API tokens page
+            </a>{" "}
+            and click "Create a new API token". Give it a name, like "Flowni"
+            and select an expiration date. Then, press "Create".
+          </p>
+        </Prose>
+      </StackCard>
+      <StackCard title="3. Provide your app details">
+        <Prose className="max-w-none">
+          <p>Copy and paste the provided API token below:</p>
+
+          <JiraInstallationForm />
+        </Prose>
+      </StackCard>
+    </>
+  );
+};

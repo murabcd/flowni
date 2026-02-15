@@ -1,0 +1,150 @@
+"use client";
+
+import type { DateRange } from "@repo/design-system/components/precomposed/calendar";
+import { Calendar } from "@repo/design-system/components/precomposed/calendar";
+import { Dialog } from "@repo/design-system/components/precomposed/dialog";
+import { Input } from "@repo/design-system/components/precomposed/input";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/design-system/components/ui/popover";
+import { handleError } from "@repo/design-system/lib/handle-error";
+import { cn } from "@repo/design-system/lib/utils";
+import { QueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import type { KeyboardEventHandler, ReactNode } from "react";
+import { useState } from "react";
+import { createRelease } from "@/actions/release/create";
+import { useReleaseForm } from "./use-release-form";
+
+export const ReleaseForm = () => {
+  const [name, setName] = useState("");
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: undefined,
+  });
+  const [loading, setLoading] = useState(false);
+  const disabled = !name.trim() || loading;
+  const { isOpen, toggle, hide } = useReleaseForm();
+  const queryClient = new QueryClient();
+  const router = useRouter();
+
+  const handleCreate = async () => {
+    if (disabled) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { id, error } = await createRelease(name, date?.from, date?.to);
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      if (!id) {
+        throw new Error("Something went wrong");
+      }
+
+      setName("");
+
+      hide();
+
+      await queryClient.invalidateQueries({ queryKey: ["release"] });
+
+      router.push(`/releases/${id}`);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
+      event.preventDefault();
+      handleCreate();
+    }
+  };
+
+  let dateLabel: ReactNode = <span>Pick a date</span>;
+
+  if (date?.from) {
+    if (date.to) {
+      dateLabel = (
+        <>
+          {format(date.from, "LLL dd, y")} to {format(date.to, "LLL dd, y")}
+        </>
+      );
+    } else {
+      dateLabel = format(date.from, "LLL dd, y");
+    }
+  }
+
+  return (
+    <Dialog
+      className="sm:max-w-xl"
+      cta="Create release"
+      disabled={disabled}
+      footer={
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              className={cn(
+                "flex w-full items-center justify-start gap-2 text-left font-normal",
+                !date && "text-muted-foreground"
+              )}
+              id="date"
+              variant="outline"
+            >
+              <CalendarIcon size={16} />
+              {dateLabel}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            className="w-auto p-0"
+            collisionPadding={12}
+          >
+            <Calendar
+              defaultMonth={date?.from}
+              initialFocus
+              mode="range"
+              numberOfMonths={2}
+              onSelect={setDate}
+              selected={date}
+            />
+          </PopoverContent>
+        </Popover>
+      }
+      modal={false}
+      onClick={handleCreate}
+      onOpenChange={toggle}
+      open={isOpen}
+      title={
+        <p className="font-medium text-muted-foreground text-sm tracking-tight">
+          Create a release
+        </p>
+      }
+    >
+      <Input
+        autoComplete="off"
+        className="border-none p-0 font-medium shadow-none focus-visible:ring-0 md:text-lg"
+        maxLength={191}
+        onChangeText={setName}
+        onKeyDown={handleKeyDown}
+        placeholder="Release 1.1"
+        value={name}
+      />
+    </Dialog>
+  );
+};

@@ -1,0 +1,123 @@
+import { FlowniRole } from "@repo/backend/auth";
+import { currentOrganizationId, currentUser } from "@repo/backend/auth/utils";
+import { database, tables } from "@repo/backend/database";
+import { Tooltip } from "@repo/design-system/components/precomposed/tooltip";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@repo/design-system/components/ui/resizable";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { eq, sql } from "drizzle-orm";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+import { getChangelog } from "@/actions/changelog/get";
+import { Header } from "@/components/header";
+import { createMetadata } from "@/lib/metadata";
+import { ChangelogEmptyState } from "./components/changelog-empty-state";
+import { ChangelogList } from "./components/changelog-list";
+import { CreateChangelogButton } from "./components/create-changelog-button";
+
+type ChangelogLayoutProperties = {
+  readonly children: ReactNode;
+};
+
+const title = "Changelog";
+const description = "View the changelog for the organization.";
+
+export const metadata: Metadata = createMetadata({
+  title,
+  description,
+});
+
+const ChangelogLayout = async ({ children }: ChangelogLayoutProperties) => {
+  const [user, organizationId] = await Promise.all([
+    currentUser(),
+    currentOrganizationId(),
+  ]);
+  const queryClient = new QueryClient();
+
+  if (!(user && organizationId)) {
+    notFound();
+  }
+
+  const [countResult] = await Promise.all([
+    database
+      .select({ count: sql<number>`count(*)` })
+      .from(tables.changelog)
+      .where(eq(tables.changelog.organizationId, organizationId)),
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["changelog"],
+      queryFn: async ({ pageParam }) => {
+        const response = await getChangelog(pageParam);
+
+        if ("error" in response) {
+          throw response.error;
+        }
+
+        return response.data;
+      },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
+        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      pages: 1,
+    }),
+  ]);
+
+  const count = countResult?.[0]?.count ?? 0;
+
+  const role =
+    user.organizationRole === FlowniRole.Admin ||
+    user.organizationRole === FlowniRole.Editor ||
+    user.organizationRole === FlowniRole.Member
+      ? user.organizationRole
+      : FlowniRole.Member;
+
+  if (count === 0) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <ChangelogEmptyState role={role} />
+      </div>
+    );
+  }
+
+  return (
+    <ResizablePanelGroup direction="horizontal" style={{ overflow: "unset" }}>
+      <ResizablePanel
+        className="sticky top-0 h-screen"
+        defaultSize={30}
+        maxSize={35}
+        minSize={25}
+        style={{ overflow: "auto" }}
+      >
+        <Header badge={count} title="Changelog">
+          {role === FlowniRole.Member ? null : (
+            <div className="-m-2">
+              <Tooltip align="end" content="Post a new update" side="bottom">
+                <CreateChangelogButton />
+              </Tooltip>
+            </div>
+          )}
+        </Header>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <ChangelogList />
+        </HydrationBoundary>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel
+        className="self-start"
+        defaultSize={70}
+        style={{ overflow: "unset" }}
+      >
+        {children}
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
+};
+
+export default ChangelogLayout;

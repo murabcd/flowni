@@ -1,0 +1,87 @@
+import type { Product } from "@repo/backend/types";
+import { handleError } from "@repo/design-system/lib/handle-error";
+import { useParams, useRouter } from "next/navigation";
+import { deleteGroup } from "@/actions/group/delete";
+import { updateGroup } from "@/actions/group/update";
+import type { GroupWithSubgroups } from "@/lib/group";
+import { ProductsListItem } from "./products-list-item";
+
+type ProductsListGroupProperties = {
+  readonly data: GroupWithSubgroups;
+  readonly productId: Product["id"];
+  readonly level?: number;
+  readonly role?: string;
+};
+
+export const ProductsListGroup = ({
+  data,
+  productId,
+  level = 1,
+  role,
+}: ProductsListGroupProperties) => {
+  const parameters = useParams();
+  const router = useRouter();
+
+  const handleEmojiSelect = async (emoji: string) => {
+    try {
+      const { error } = await updateGroup(data.id, { emoji });
+
+      if (error) {
+        throw new Error(error);
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleRename = async (name: string) => {
+    const { error } = await updateGroup(data.id, { name });
+
+    if (error) {
+      throw new Error(error);
+    }
+  };
+
+  const handleDelete = async () => {
+    const { error } = await deleteGroup(data.id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    if (parameters.group === data.id) {
+      router.push("/features");
+    }
+  };
+
+  return (
+    <div className="pl-6" key={data.id}>
+      <ProductsListItem
+        active={parameters.group === data.id}
+        className="rounded-l"
+        createProps={{ productId, groupId: data.id }}
+        emoji={data.emoji}
+        hasChildren={data.subgroups.length > 0}
+        href={`/features/groups/${data.id}`}
+        id={data.id}
+        name={data.name}
+        onDelete={handleDelete}
+        onEmojiSelect={handleEmojiSelect}
+        onRename={handleRename}
+        role={role}
+      >
+        <div>
+          {data.subgroups.map((group) => (
+            <ProductsListGroup
+              data={group}
+              key={group.id}
+              level={level + 1}
+              productId={productId}
+              role={role}
+            />
+          ))}
+        </div>
+      </ProductsListItem>
+    </div>
+  );
+};
