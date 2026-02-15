@@ -1,0 +1,30 @@
+{
+  "name": "adf-validator",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3006",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@atlaskit/adf-schema": "^49.0.0",
+    "@monaco-editor/react": "^4.7.0",
+    "@repo/design-system": "workspace:*",
+    "@repo/editor": "workspace:*",
+    "ajv": "^8.17.1",
+    "ajv-draft-04": "^1.0.0",
+    "better-ajv-errors": "^1.2.0",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "postcss": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}
