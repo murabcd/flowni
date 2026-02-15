@@ -1,0 +1,69 @@
+"use client";
+
+import type { ComponentProps, ReactNode } from "react";
+import { Button } from "../ui/button";
+
+// biome-ignore lint/performance/noNamespaceImport: we're using the primitive component
+import * as DialogComponent from "../ui/dialog";
+
+export type DialogProperties = ComponentProps<typeof DialogComponent.Dialog> & {
+  readonly title?: ReactNode;
+  readonly description?: ReactNode;
+  readonly trigger?: ReactNode;
+  readonly onClick?: () => void;
+  readonly disabled?: boolean;
+  readonly footer?: ReactNode;
+  readonly cta?: string;
+  readonly className?: string;
+};
+
+export const Dialog = ({
+  title,
+  description,
+  trigger,
+  onClick,
+  disabled,
+  cta,
+  footer,
+  children,
+  className,
+  ...properties
+}: DialogProperties) => {
+  const showCta = Boolean(cta) && Boolean(onClick);
+  const showFooter = Boolean(footer) || showCta;
+
+  return (
+    <DialogComponent.Dialog {...properties}>
+      {trigger ? (
+        <DialogComponent.DialogTrigger asChild>
+          <div className="shrink-0">{trigger}</div>
+        </DialogComponent.DialogTrigger>
+      ) : null}
+      <DialogComponent.DialogContent className={className}>
+        {(title ?? description) ? (
+          <DialogComponent.DialogHeader>
+            {title ? (
+              <DialogComponent.DialogTitle>{title}</DialogComponent.DialogTitle>
+            ) : null}
+            {description ? (
+              <DialogComponent.DialogDescription>
+                {description}
+              </DialogComponent.DialogDescription>
+            ) : null}
+          </DialogComponent.DialogHeader>
+        ) : null}
+        {children}
+        {showFooter ? (
+          <DialogComponent.DialogFooter className="flex items-center justify-between gap-3 sm:justify-between">
+            {footer ? <div>{footer}</div> : null}
+            {showCta ? (
+              <Button disabled={disabled} onClick={onClick}>
+                {cta}
+              </Button>
+            ) : null}
+          </DialogComponent.DialogFooter>
+        ) : null}
+      </DialogComponent.DialogContent>
+    </DialogComponent.Dialog>
+  );
+};
