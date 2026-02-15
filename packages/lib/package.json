@@ -1,0 +1,24 @@
+{
+  "name": "@repo/lib",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "fuse.js": "^7.1.0",
+    "server-only": "catalog:",
+    "slugify": "^1.6.6"
+  },
+  "peerDependencies": {
+    "next": "catalog:",
+    "react": "catalog:"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  }
+}

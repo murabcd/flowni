@@ -1,0 +1,28 @@
+import { logger, serializeError } from "./logger";
+
+export const parseError = (error: unknown): string => {
+  let message = "An error occurred";
+
+  if (error instanceof Error) {
+    message = error.message;
+  } else if (error && typeof error === "object" && "message" in error) {
+    message = error.message as string;
+  } else {
+    message = String(error);
+  }
+
+  try {
+    logger.error({
+      event: "parse_error",
+      message,
+      error: serializeError(error),
+    });
+  } catch (newError) {
+    // Ignore logging failures in restricted environments.
+    if (newError) {
+      return message;
+    }
+  }
+
+  return message;
+};
