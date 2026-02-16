@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type { Initiative } from "@repo/backend/types";
 import { Avatar } from "@repo/design-system/components/precomposed/avatar";
@@ -8,12 +7,13 @@ import { Select } from "@repo/design-system/components/precomposed/select";
 import { handleError } from "@repo/design-system/lib/handle-error";
 import { useState } from "react";
 import { updateInitiative } from "@/actions/initiative/update";
+import type { MemberInfo } from "@/lib/serialization";
 
 type InitiativeOwnerPickerProperties = {
   readonly initiativeId: Initiative["id"];
   readonly defaultValue: string;
   readonly disabled: boolean;
-  readonly data: User[];
+  readonly data: MemberInfo[];
 };
 
 export const InitiativeOwnerPicker = ({

@@ -13,6 +13,7 @@ import { and, asc, eq, inArray, isNotNull, isNull } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createMetadata } from "@/lib/metadata";
+import { toMemberInfoList } from "@/lib/serialization";
 import {
   RoadmapEditor,
   type RoadmapEditorProperties,
@@ -108,6 +109,7 @@ const Roadmap = async () => {
         .where(eq(tables.organization.id, organizationId))
         .limit(1),
     ]);
+  const membersLite = toMemberInfoList(members);
 
   const organization = organizationRows[0];
 
@@ -199,7 +201,7 @@ const Roadmap = async () => {
         ...event,
         date: new Date(event.date),
       }))}
-      members={members}
+      members={membersLite}
     />
   );
 };

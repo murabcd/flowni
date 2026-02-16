@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import {
   type GanttFeature,
   GanttFeatureItem,
@@ -15,10 +14,11 @@ import {
 } from "@repo/design-system/components/kibo-ui/gantt";
 import { useRouter } from "next/navigation";
 import { FeatureItemInner } from "@/components/roadmap-item";
+import type { MemberInfo } from "@/lib/serialization";
 
 type QuarterlyRoadmapGanttProperties = {
   readonly groups: Record<string, (GanttFeature & { ownerId: string })[]>;
-  readonly members: User[];
+  readonly members: MemberInfo[];
 };
 
 export const QuarterlyRoadmapGantt = ({

@@ -1,4 +1,3 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type { tables } from "@repo/backend/database";
 import { Link } from "@repo/design-system/components/link";
@@ -19,10 +18,11 @@ import {
   UserPlusIcon,
 } from "lucide-react";
 import type { GetActivityResponse } from "@/actions/activity/get";
+import type { MemberInfo } from "@/lib/serialization";
 import { ActivityItem } from "./activity-item";
 
 type ActivityDayProperties = {
-  readonly members: User[];
+  readonly members: MemberInfo[];
   readonly data: GetActivityResponse;
 };
 
@@ -40,10 +40,10 @@ const getIconForSource = (
 };
 
 export const ActivityDay = ({ data, members }: ActivityDayProperties) => {
-  const getMemberById = (id: User["id"]) =>
+  const getMemberById = (id: MemberInfo["id"]) =>
     members.find((member) => member.id === id);
 
-  const getMemberName = (id: User["id"]) => {
+  const getMemberName = (id: MemberInfo["id"]) => {
     const member = getMemberById(id);
 
     return member ? getUserName(member) : "Someone";

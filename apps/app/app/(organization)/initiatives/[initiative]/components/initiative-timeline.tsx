@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import type {
   Feature,
   FeatureStatus,
@@ -30,6 +29,7 @@ import { GanttChartIcon, Maximize2Icon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { FeatureItemInner } from "@/components/roadmap-item";
 import { useRoadmap } from "@/hooks/use-roadmap";
+import type { MemberInfo } from "@/lib/serialization";
 
 type InitiativeTimelineProps = {
   title: Initiative["title"];
@@ -41,7 +41,7 @@ type InitiativeTimelineProps = {
     startAt: Date;
     endAt: Date;
   })[];
-  readonly members: User[];
+  readonly members: MemberInfo[];
 };
 
 const filterFeatures = (
@@ -98,7 +98,7 @@ const buildGroups = (
   }
 
   return Object.fromEntries(
-    Object.entries(groupedData).sort(([nameA], [nameB]) =>
+    [...Object.entries(groupedData)].sort(([nameA], [nameB]) =>
       nameA.localeCompare(nameB)
     )
   );

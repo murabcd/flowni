@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type { Initiative } from "@repo/backend/types";
 import { Select } from "@repo/design-system/components/precomposed/select";
@@ -12,10 +11,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { addInitiativeMember } from "@/actions/initiative-member/create";
 import { deleteInitiativeMember } from "@/actions/initiative-member/delete";
+import type { MemberInfo } from "@/lib/serialization";
 
 type InitiativeMemberPickerProperties = {
   readonly initiativeId: Initiative["id"];
-  readonly users: User[];
+  readonly users: MemberInfo[];
   readonly defaultMembers: string[];
 };
 

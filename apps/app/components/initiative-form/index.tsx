@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import { EmojiSelector } from "@repo/design-system/components/emoji-selector";
 import { Dialog } from "@repo/design-system/components/precomposed/dialog";
 import { Input } from "@repo/design-system/components/precomposed/input";
@@ -9,11 +8,12 @@ import { useRouter } from "next/navigation";
 import type { KeyboardEventHandler } from "react";
 import { useState } from "react";
 import { createInitiative } from "@/actions/initiative/create";
+import type { MemberInfo } from "@/lib/serialization";
 import { FeatureAssigneePicker } from "../feature-form/feature-assignee-picker";
 import { useInitiativeForm } from "./use-initiative-form";
 
 type InitiativeFormProperties = {
-  readonly members: User[];
+  readonly members: MemberInfo[];
   readonly userId: string;
 };
 

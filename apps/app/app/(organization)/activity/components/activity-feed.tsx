@@ -1,15 +1,15 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import { handleError } from "@repo/design-system/lib/handle-error";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { getActivity } from "@/actions/activity/get";
 import { InfiniteLoader } from "@/components/infinite-loader";
+import type { MemberInfo } from "@/lib/serialization";
 import { ActivityDay } from "./activity-day";
 
 type ActivityFeedProperties = {
-  readonly members: User[];
+  readonly members: MemberInfo[];
 };
 
 export const ActivityFeed = ({ members }: ActivityFeedProperties) => {

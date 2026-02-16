@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import type { Group, Product } from "@repo/backend/types";
 import { Dialog } from "@repo/design-system/components/precomposed/dialog";
 import { Input } from "@repo/design-system/components/precomposed/input";
@@ -11,14 +10,15 @@ import type { KeyboardEventHandler } from "react";
 import { useState } from "react";
 import { createFeature } from "@/actions/feature/create";
 import { nestGroups } from "@/lib/group";
+import type { MemberInfo } from "@/lib/serialization";
 import { FeatureAssigneePicker } from "./feature-assignee-picker";
 import { FeatureGroupPicker } from "./feature-group-picker";
 import { FeatureProductPicker } from "./feature-product-picker";
 import { useFeatureForm } from "./use-feature-form";
 
 type FeatureFormProperties = {
-  readonly userId: User["id"];
-  readonly members: User[];
+  readonly userId: MemberInfo["id"];
+  readonly members: MemberInfo[];
   readonly products: Pick<Product, "emoji" | "id" | "name">[];
   readonly groups: Pick<
     Group,

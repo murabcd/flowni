@@ -1,10 +1,10 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import { Select } from "@repo/design-system/components/precomposed/select";
 import Image from "next/image";
+import type { MemberInfo } from "@/lib/serialization";
 
 type FeatureAssigneePickerProperties = {
-  readonly data: User[];
+  readonly data: MemberInfo[];
   readonly value: string;
   readonly onChange: (value: string) => void;
 };

@@ -7,6 +7,7 @@ import {
 import type { Metadata } from "next";
 import { getActivity } from "@/actions/activity/get";
 import { createMetadata } from "@/lib/metadata";
+import { toMemberInfoList } from "@/lib/serialization";
 import { ActivityFeed } from "./components/activity-feed";
 
 const title = "Activity";
@@ -38,6 +39,7 @@ const Activity = async () => {
       pages: 1,
     }),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 p-6 py-16">
@@ -46,7 +48,7 @@ const Activity = async () => {
         <p className="text-muted-foreground">{description}</p>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ActivityFeed members={members} />
+        <ActivityFeed members={membersLite} />
       </HydrationBoundary>
     </div>
   );

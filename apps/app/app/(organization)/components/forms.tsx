@@ -16,6 +16,7 @@ import { InitiativeForm } from "@/components/initiative-form";
 import { ProductForm } from "@/components/product-form";
 import { ReleaseForm } from "@/components/release-form";
 import { database } from "@/lib/database";
+import { toMemberInfoList } from "@/lib/serialization";
 import { staticify } from "@/lib/staticify";
 
 export const Forms = async () => {
@@ -90,6 +91,7 @@ export const Forms = async () => {
       .limit(1),
     currentMembers(),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   if (!organization) {
     return <div />;
@@ -106,13 +108,13 @@ export const Forms = async () => {
         <>
           <FeatureForm
             groups={groups}
-            members={staticify(members)}
+            members={staticify(membersLite)}
             products={products}
             userId={user.id}
           />
           <ProductForm />
           <GroupForm groups={groups} products={products} />
-          <InitiativeForm members={staticify(members)} userId={user.id} />
+          <InitiativeForm members={staticify(membersLite)} userId={user.id} />
           <ConnectForm
             jiraAccessToken={atlassianInstallations.at(0)?.accessToken}
           />

@@ -1,4 +1,3 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type {
   Feature,
@@ -15,6 +14,7 @@ import { cn } from "@repo/design-system/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { updateFeatures } from "@/actions/feature/bulk/update";
+import type { MemberInfo } from "@/lib/serialization";
 import { FeatureToolbarDeleteButton } from "./feature-toolbar-delete-button";
 import { FeatureToolbarMoveButton } from "./feature-toolbar-move-button";
 
@@ -28,7 +28,7 @@ type FeaturesToolbarProperties = {
   >[];
   readonly selected: string[];
   readonly onClose: () => void;
-  readonly members: User[];
+  readonly members: MemberInfo[];
 };
 
 export const FeaturesToolbar = ({

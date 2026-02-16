@@ -1,12 +1,12 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type { GanttFeature } from "@repo/design-system/components/kibo-ui/gantt";
 import { memo } from "react";
+import type { MemberInfo } from "@/lib/serialization";
 import { AvatarTooltip } from "./avatar-tooltip";
 
 type FeatureItemProperties = {
   readonly feature: GanttFeature;
-  readonly owner?: User;
+  readonly owner?: MemberInfo;
 };
 
 const FeatureItem = ({ feature, owner }: FeatureItemProperties) => {

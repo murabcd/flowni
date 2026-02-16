@@ -14,9 +14,11 @@ import { eq, sql } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import type { FeatureCursor } from "@/actions/feature/list";
 import { getFeatures } from "@/actions/feature/list";
 import { database } from "@/lib/database";
 import { createMetadata } from "@/lib/metadata";
+import { toMemberInfoList } from "@/lib/serialization";
 import { FeaturesEmptyState } from "../components/features-empty-state";
 import { FeaturesList } from "../components/features-list";
 
@@ -31,6 +33,7 @@ const FeaturesIndex = async () => {
     currentOrganizationId(),
     currentMembers(),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   if (!(user && organizationId)) {
     return notFound();
@@ -95,11 +98,10 @@ const FeaturesIndex = async () => {
           throw response.error;
         }
 
-        return response.data;
+        return response;
       },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      initialPageParam: null as FeatureCursor | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       pages: 1,
     }),
   ]);
@@ -118,7 +120,7 @@ const FeaturesIndex = async () => {
           count={count}
           editable={role !== FlowniRole.Member}
           groups={databaseOrganization.groups}
-          members={members}
+          members={membersLite}
           products={databaseOrganization.products}
           query={query}
           releases={databaseOrganization.releases}

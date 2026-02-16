@@ -5,6 +5,7 @@ import {
   currentUser,
 } from "@repo/backend/auth/utils";
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Feature, Feedback } from "@repo/backend/types";
 import { Button } from "@repo/design-system/components/ui/button";
 import { contentToText } from "@repo/editor/lib/tiptap";
@@ -20,6 +21,7 @@ import {
   Root as SettingsBarRoot,
 } from "@/components/settings-bar";
 import { calculateRice } from "@/lib/rice";
+import { toMemberInfoList } from "@/lib/serialization";
 import { ConnectButton } from "./connect-button";
 import { DisconnectButton } from "./disconnect-button";
 import { FeatureClearDateButton } from "./feature-clear-date-button";
@@ -368,7 +370,7 @@ const enrichFeedbackContent = (
       } | null;
     };
   }[],
-  contentByFeedbackId: Map<string, object | null>
+  contentByFeedbackId: Map<string, JsonValue | null>
 ) =>
   feedbackItems.map((feedbackItem) => ({
     ...feedbackItem.feedback,
@@ -470,6 +472,7 @@ export const FeatureSidebar = async ({
     featureWithRelations,
     modifiedFeedback,
   } = data;
+  const membersLite = toMemberInfoList(members);
 
   const riceScore = featureWithRelations.rice
     ? calculateRice(featureWithRelations.rice)
@@ -508,7 +511,7 @@ export const FeatureSidebar = async ({
 
       <SettingsBarItem title="Owner">
         <FeatureOwnerPicker
-          data={members}
+          data={membersLite}
           defaultValue={featureWithRelations.ownerId}
           disabled={user.organizationRole === FlowniRole.Member}
           featureId={featureWithRelations.id}

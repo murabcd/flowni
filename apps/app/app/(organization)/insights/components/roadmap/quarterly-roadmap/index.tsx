@@ -7,6 +7,7 @@ import type { GanttFeature } from "@repo/design-system/components/kibo-ui/gantt"
 import { StackCard } from "@repo/design-system/components/stack-card";
 import { endOfQuarter, startOfQuarter } from "date-fns";
 import { and, eq, gte, lte, or } from "drizzle-orm";
+import { toMemberInfoList } from "@/lib/serialization";
 import { QuarterlyRoadmapGantt } from "./gantt";
 
 export const QuarterlyRoadmap = async () => {
@@ -61,6 +62,7 @@ export const QuarterlyRoadmap = async () => {
         )
       ),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   const createGroupedFeatures = () => {
     const groupedData: Record<string, (GanttFeature & { ownerId: string })[]> =
@@ -88,7 +90,7 @@ export const QuarterlyRoadmap = async () => {
 
     // Sort groups alphabetically
     return Object.fromEntries(
-      Object.entries(groupedData).sort(([nameA], [nameB]) =>
+      [...Object.entries(groupedData)].sort(([nameA], [nameB]) =>
         nameA.localeCompare(nameB)
       )
     );
@@ -98,7 +100,7 @@ export const QuarterlyRoadmap = async () => {
 
   return (
     <StackCard className="p-0" title="Quarterly Roadmap">
-      <QuarterlyRoadmapGantt groups={groups} members={members} />
+      <QuarterlyRoadmapGantt groups={groups} members={membersLite} />
     </StackCard>
   );
 };

@@ -13,10 +13,12 @@ import {
 import { and, count, eq, ilike } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import type { FeatureCursor } from "@/actions/feature/list";
 import { getFeatures } from "@/actions/feature/list";
 import { FeaturesList } from "@/app/(organization)/features/components/features-list";
 import { database } from "@/lib/database";
 import { createMetadata } from "@/lib/metadata";
+import { toMemberInfoList } from "@/lib/serialization";
 
 type FeatureSeachPageProperties = {
   readonly searchParams?: Promise<{
@@ -36,6 +38,7 @@ const FeatureProduct = async (props: FeatureSeachPageProperties) => {
     currentOrganizationId(),
     currentMembers(),
   ]);
+  const membersLite = toMemberInfoList(members);
   const queryClient = new QueryClient();
 
   if (!(user && organizationId)) {
@@ -109,11 +112,10 @@ const FeatureProduct = async (props: FeatureSeachPageProperties) => {
           throw response.error;
         }
 
-        return response.data;
+        return response;
       },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      initialPageParam: null as FeatureCursor | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       pages: 1,
     }),
   ]);
@@ -132,7 +134,7 @@ const FeatureProduct = async (props: FeatureSeachPageProperties) => {
           count={totalCount}
           editable={role !== FlowniRole.Member}
           groups={databaseOrganization.groups}
-          members={members}
+          members={membersLite}
           products={databaseOrganization.products}
           query={query}
           releases={databaseOrganization.releases}

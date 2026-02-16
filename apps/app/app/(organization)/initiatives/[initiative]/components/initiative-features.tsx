@@ -1,4 +1,3 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import {
   currentMembers,
@@ -17,6 +16,8 @@ import { and, eq, inArray } from "drizzle-orm";
 import { TablePropertiesIcon } from "lucide-react";
 import Image from "next/image";
 import { AvatarTooltip } from "@/components/avatar-tooltip";
+import type { MemberInfo } from "@/lib/serialization";
+import { toMemberInfoList } from "@/lib/serialization";
 import { InitiativeTimeline } from "./initiative-timeline";
 
 type InitiativeFeaturesProps = {
@@ -31,7 +32,7 @@ const InitiativeFeature = ({
     status: Pick<FeatureStatus, "color">;
     connection: Pick<FeatureConnection, "type"> | null;
   };
-  readonly owner: User | undefined;
+  readonly owner: MemberInfo | undefined;
 }) => {
   const featureConnectionSource = feature.connection ? "/jira.svg" : null;
   const hasConnectionSource = featureConnectionSource !== null;
@@ -123,6 +124,7 @@ export const InitiativeFeatures = async ({
       .from(tables.initiativeToProduct)
       .where(eq(tables.initiativeToProduct.a, initiativeId)),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   const initiative = initiativeRows[0];
 
@@ -217,7 +219,9 @@ export const InitiativeFeatures = async ({
             <InitiativeFeature
               feature={feature}
               key={feature.id}
-              owner={members.find((member) => member.id === feature.ownerId)}
+              owner={membersLite.find(
+                (member) => member.id === feature.ownerId
+              )}
             />
           ))}
         </StackCard>
@@ -225,7 +229,7 @@ export const InitiativeFeatures = async ({
       {roadmapFeatures.length > 0 && (
         <InitiativeTimeline
           features={roadmapFeatures as never}
-          members={members}
+          members={membersLite}
           title={initiative.title}
         />
       )}

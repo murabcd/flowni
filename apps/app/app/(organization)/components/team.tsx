@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import { createSupabaseBrowserClient } from "@repo/backend/supabase/client";
 import { Avatar } from "@repo/design-system/components/precomposed/avatar";
@@ -12,8 +11,15 @@ import {
 import { handleError } from "@repo/design-system/lib/handle-error";
 import { cn } from "@repo/design-system/lib/utils";
 import { useEffect, useState } from "react";
+import type { MemberInfo } from "@/lib/serialization";
 
-const ActivityAvatar = ({ user, online }: { user: User; online: boolean }) => (
+const ActivityAvatar = ({
+  user,
+  online,
+}: {
+  user: MemberInfo;
+  online: boolean;
+}) => (
   <div className="relative">
     <Avatar fallback={getUserName(user).slice(0, 2)} src={user.image ?? ""} />
     <div
@@ -30,9 +36,9 @@ export const Team = ({
   organizationId,
   members,
 }: {
-  user: User;
+  user: MemberInfo;
   organizationId: string;
-  members: User[];
+  members: MemberInfo[];
 }) => {
   const [onlineIds, setOnlineIds] = useState<string[]>([]);
 
@@ -71,7 +77,7 @@ export const Team = ({
 
   const onlineMembers = onlineIds
     .map((id) => members.find((member) => member.id === id))
-    .filter(Boolean) as User[];
+    .filter(Boolean) as MemberInfo[];
   const offlineMembers = members.filter(
     (member) => !onlineMembers.includes(member)
   );

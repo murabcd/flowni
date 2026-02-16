@@ -1,4 +1,3 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import { getJsonColumnFromTable } from "@repo/backend/database";
 import type {
@@ -13,13 +12,14 @@ import { cn } from "@repo/design-system/lib/utils";
 import { contentToText } from "@repo/editor/lib/tiptap";
 import { ArrowRightIcon } from "lucide-react";
 import { AvatarTooltip } from "@/components/avatar-tooltip";
+import type { MemberInfo } from "@/lib/serialization";
 
 type InitiativeItemProps = {
   initiative: Pick<Initiative, "id" | "emoji" | "title" | "state"> & {
     team: Pick<InitiativeMember, "userId">[];
     pages: Pick<InitiativePage, "id">[];
   };
-  members: User[];
+  members: MemberInfo[];
 };
 
 const getBackgroundColor = (state: Initiative["state"]) => {

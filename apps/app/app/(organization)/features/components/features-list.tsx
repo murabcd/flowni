@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import { FlowniRole } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type {
@@ -24,6 +23,7 @@ import {
   TableRow,
 } from "@repo/design-system/components/ui/table";
 import { handleError } from "@repo/design-system/lib/handle-error";
+import type { InfiniteData } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type {
   ColumnDef,
@@ -51,6 +51,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import type { ComponentProps, FormEventHandler } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
+  FeatureCursor,
   FeatureFilters,
   GetFeaturesResponse,
 } from "@/actions/feature/list";
@@ -60,6 +61,7 @@ import { EmptyState } from "@/components/empty-state";
 import { useFeatureForm } from "@/components/feature-form/use-feature-form";
 import { Header } from "@/components/header";
 import { calculateRice } from "@/lib/rice";
+import type { MemberInfo } from "@/lib/serialization";
 import { FeatureRiceScore } from "../[feature]/components/feature-rice-score";
 import { FeaturesListFilter } from "./features-list-filter";
 import { FeaturesToolbar } from "./features-toolbar";
@@ -77,12 +79,18 @@ type FeaturesListProperties = {
     Group,
     "emoji" | "id" | "name" | "parentGroupId" | "productId"
   >[];
-  readonly members: User[];
+  readonly members: MemberInfo[];
   readonly role?: string;
 };
 
+type FeaturesPage = {
+  data: GetFeaturesResponse;
+  nextCursor: FeatureCursor | null;
+  total: number;
+};
+
 const createColumns = (
-  members: User[],
+  members: MemberInfo[],
   editable: boolean
 ): ColumnDef<GetFeaturesResponse[number]>[] => [
   {
@@ -350,22 +358,25 @@ export const FeaturesList = ({
   const router = useRouter();
   const { show } = useFeatureForm();
   const parameters = useParams();
-  const { data, error, fetchNextPage, isFetching } = useInfiniteQuery({
+  const { data, error, fetchNextPage, isFetching } = useInfiniteQuery<
+    FeaturesPage,
+    Error,
+    InfiniteData<FeaturesPage>,
+    (string | FeatureFilters)[],
+    FeatureCursor | null
+  >({
     queryKey: ["features", query],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam }): Promise<FeaturesPage> => {
       const response = await getFeatures(pageParam, query);
 
       if ("error" in response) {
         throw response.error;
       }
 
-      return response.data;
+      return response;
     },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-      lastPage.length === 0 ? undefined : lastPageParameter + 1,
-    getPreviousPageParam: (_firstPage, _allPages, firstPageParameter) =>
-      firstPageParameter <= 1 ? undefined : firstPageParameter - 1,
+    initialPageParam: null as FeatureCursor | null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
   });
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
@@ -383,8 +394,11 @@ export const FeaturesList = ({
   );
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-  const flatData = useMemo(() => data?.pages.flat() ?? [], [data]);
-  const totalDbRowCount = data?.pages.at(0)?.at(0)?.meta.total ?? 0;
+  const flatData = useMemo(
+    () => data?.pages.flatMap((page) => page.data) ?? [],
+    [data]
+  );
+  const totalDbRowCount = data?.pages.at(0)?.total ?? 0;
   const totalFetched = flatData.length;
   const columns = useMemo(
     () => createColumns(members, editable),
@@ -437,7 +451,9 @@ export const FeaturesList = ({
   }, [fetchNextPage, isFetching, totalFetched, totalDbRowCount]);
 
   useEffect(() => {
-    window.addEventListener("scroll", fetchMoreOnBottomReached);
+    window.addEventListener("scroll", fetchMoreOnBottomReached, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener("scroll", fetchMoreOnBottomReached);

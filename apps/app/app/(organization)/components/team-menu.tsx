@@ -1,4 +1,4 @@
-import { FlowniRole, type User } from "@repo/backend/auth";
+import { FlowniRole } from "@repo/backend/auth";
 import {
   currentMembers,
   currentOrganizationId,
@@ -6,6 +6,7 @@ import {
 } from "@repo/backend/auth/utils";
 import { database, tables } from "@repo/backend/database";
 import { eq } from "drizzle-orm";
+import { toMemberInfo, toMemberInfoList } from "@/lib/serialization";
 import { Team } from "./team";
 
 export const TeamMenu = async () => {
@@ -14,6 +15,7 @@ export const TeamMenu = async () => {
     currentOrganizationId(),
     currentMembers(),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   if (!(user && organizationId)) {
     return null;
@@ -34,32 +36,18 @@ export const TeamMenu = async () => {
     return null;
   }
 
-  const resolveDate = (value: unknown) => {
-    if (value instanceof Date) {
-      return value;
-    }
-    if (value) {
-      return new Date(value as string);
-    }
-    return new Date();
-  };
-
-  const safeUser: User = {
+  const safeUser = toMemberInfo({
     ...user,
     name: user.name ?? "",
     email: user.email ?? "",
     image: user.image ?? undefined,
-    organizationId: user.organizationId ?? undefined,
     organizationRole: user.organizationRole ?? FlowniRole.Member,
-    emailVerified: Boolean(user.emailVerified),
-    createdAt: resolveDate(user.createdAt),
-    updatedAt: resolveDate(user.updatedAt),
-  };
+  });
 
   return (
     <div className="px-2">
       <Team
-        members={members}
+        members={membersLite}
         organizationId={organization.id}
         user={safeUser}
       />

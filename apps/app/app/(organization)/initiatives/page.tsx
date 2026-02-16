@@ -13,6 +13,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EmptyState } from "@/components/empty-state";
 import { createMetadata } from "@/lib/metadata";
+import { toMemberInfoList } from "@/lib/serialization";
 import { CreateInitiativeButton } from "./components/create-initiative-button";
 import { InitiativeItem } from "./components/initiative-item";
 import { InitiativesEmptyState } from "./components/initiatives-empty-state";
@@ -50,6 +51,7 @@ const Initiatives = async () => {
       .orderBy(desc(tables.initiative.createdAt)),
     currentMembers(),
   ]);
+  const membersLite = toMemberInfoList(members);
 
   const initiativeIds = initiativeRows.map((initiative) => initiative.id);
   const [teamRows, pageRows] = await Promise.all([
@@ -139,7 +141,7 @@ const Initiatives = async () => {
           )}
         </div>
         <div className="mt-8 divide-y">
-          {initiatives
+          {[...initiatives]
             .sort((initiativeA, initiativeB) => {
               const stateOrder = [
                 "ACTIVE",
@@ -161,7 +163,7 @@ const Initiatives = async () => {
               <InitiativeItem
                 initiative={initiative}
                 key={initiative.id}
-                members={members.filter((member) =>
+                members={membersLite.filter((member) =>
                   initiative.team.some((team) => team.userId === member.id)
                 )}
               />
