@@ -112,7 +112,7 @@ export const JiraStatusMappingPicker = ({
           <CommandList>
             <CommandEmpty>No Jira statuses found.</CommandEmpty>
             <CommandGroup>
-              {options
+              {[...options]
                 .sort((optionA, optionB) =>
                   optionA.label.localeCompare(optionB.label)
                 )

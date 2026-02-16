@@ -49,7 +49,7 @@ export const useScrollAnchor = (): {
       setIsAtBottom(newIsAtBottom);
     };
 
-    current.addEventListener("scroll", handleScroll);
+    current.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       current.removeEventListener("scroll", handleScroll);

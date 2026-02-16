@@ -1,13 +1,16 @@
 "use client";
 
 import schema from "@atlaskit/adf-schema/dist/json-schema/v1/full.json";
-import Editor from "@monaco-editor/react";
 import { convertToAdf } from "@repo/editor/lib/jira";
 import Ajv from "ajv-draft-04";
-
 // @ts-expect-error no types
 import betterAjvErrors from "better-ajv-errors";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
 
 const emptyDoc = {
   version: 1,
@@ -59,7 +62,7 @@ export const Validator = () => {
   return (
     <div className="grid h-screen grid-rows-2 bg-backdrop">
       <main className="mx-4 grid h-full grid-cols-2 gap-4">
-        <Editor
+        <MonacoEditor
           className="my-4 overflow-hidden rounded-lg border bg-background"
           height="100%"
           language="json"
@@ -74,7 +77,7 @@ export const Validator = () => {
         {adfError ? (
           <div>{adfError.message}</div>
         ) : (
-          <Editor
+          <MonacoEditor
             className="my-4 overflow-hidden rounded-lg border bg-background"
             height="100%"
             language="json"

@@ -139,7 +139,7 @@ export const JiraFieldMappingPicker = ({
           <CommandList>
             <CommandEmpty>No Jira fields found.</CommandEmpty>
             <CommandGroup>
-              {options
+              {[...options]
                 .sort((optionA, optionB) =>
                   optionA.label.localeCompare(optionB.label)
                 )

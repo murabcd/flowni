@@ -25,7 +25,7 @@ export const ProductsList = ({ products, role }: ProductsListProperties) => {
         name="All Products"
         role={role}
       />
-      {products
+      {[...products]
         .sort((productA, productB) =>
           productA.name.localeCompare(productB.name)
         )

@@ -27,6 +27,7 @@ export const config: NextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    optimizePackageImports: ["lucide-react", "date-fns"],
   },
 
   // biome-ignore lint/suspicious/useAwait: "headers" is an async function

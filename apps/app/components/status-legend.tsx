@@ -43,7 +43,7 @@ export const StatusLegend = ({ statuses }: StatusLegendProperties) => {
           Status Legend
         </p>
         <div className="space-y-1">
-          {statuses
+          {[...statuses]
             .sort((statusA, statusB) => statusA.order - statusB.order)
             .map((status) => (
               <div className="flex items-center gap-2 text-sm" key={status.id}>

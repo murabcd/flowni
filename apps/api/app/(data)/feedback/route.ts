@@ -1,4 +1,5 @@
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import { getGravatarUrl } from "@repo/lib/gravatar";
@@ -162,18 +163,23 @@ export const POST = async (request: Request): Promise<Response> => {
     return NextResponse.json({ error: parse.error }, { status: 400 });
   }
 
-  const feedbackOrganization = await ensureFeedbackOrganization(
+  const feedbackOrganizationPromise = ensureFeedbackOrganization(
     parse.data.organization,
     apiKey
   );
-
-  const feedbackUser = await ensureFeedbackUser(
-    parse.data.user,
-    apiKey,
-    feedbackOrganization?.id ?? null
+  const feedbackUserPromise = feedbackOrganizationPromise.then(
+    (feedbackOrganization) =>
+      ensureFeedbackUser(
+        parse.data.user,
+        apiKey,
+        feedbackOrganization?.id ?? null
+      )
   );
+  const organizationPromise = getOrganization(apiKey.organizationId);
 
-  const organization = await getOrganization(apiKey.organizationId);
+  const [_feedbackOrganization, feedbackUser, organization] = await Promise.all(
+    [feedbackOrganizationPromise, feedbackUserPromise, organizationPromise]
+  );
 
   if (!organization) {
     throw new Error("Organization not found");
@@ -184,7 +190,7 @@ export const POST = async (request: Request): Promise<Response> => {
   await database.insert(tables.feedback).values([
     {
       id: createId(),
-      content: textToContent(parse.data.text),
+      content: textToContent(parse.data.text) as JsonValue,
       organizationId: organization.id,
       title: parse.data.title,
       feedbackUserId: feedbackUser ? feedbackUser.id : null,
