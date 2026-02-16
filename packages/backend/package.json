@@ -18,6 +18,7 @@
     "better-auth": "catalog:",
     "drizzle-orm": "^0.45.1",
     "nanoid": "catalog:",
+    "pg": "^8.13.1",
     "react": "catalog:",
     "server-only": "catalog:",
     "zod": "catalog:",
@@ -26,11 +27,11 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
+    "@types/pg": "^8.10.9",
     "@types/react": "catalog:",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.31.9",
     "next": "catalog:",
-    "postgres": "^3.4.5",
     "typescript": "catalog:"
   }
 }

@@ -4,7 +4,7 @@ import {
   foreignKey,
   index,
   integer,
-  json,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -15,6 +15,14 @@ import {
   varchar,
   vector,
 } from "drizzle-orm/pg-core";
+
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonValue }
+  | JsonValue[];
 
 export const cannyImportJobStatus = pgEnum("canny_import_job_status", [
   "PENDING",
@@ -489,7 +497,7 @@ export const initiativePage = pgTable(
     initiativeId: varchar("initiative_id", { length: 191 }).notNull(),
     organizationId: varchar("organization_id", { length: 191 }),
     default: boolean().default(false).notNull(),
-    content: json(),
+    content: jsonb().$type<JsonValue>(),
   },
   (table) => [
     index("idx_33173_initiative_page_initiativeId_idx").using(
@@ -521,7 +529,7 @@ export const initiativeCanvas = pgTable(
     }).notNull(),
     creatorId: varchar("creator_id", { length: 191 }).notNull(),
     title: varchar({ length: 191 }).notNull(),
-    content: json().notNull(),
+    content: jsonb().$type<JsonValue>().notNull(),
     initiativeId: varchar("initiative_id", { length: 191 }).notNull(),
     organizationId: varchar("organization_id", { length: 191 }),
   },
@@ -555,7 +563,7 @@ export const initiativeUpdate = pgTable(
     }).notNull(),
     creatorId: varchar("creator_id", { length: 191 }).notNull(),
     title: varchar({ length: 191 }).notNull(),
-    content: json().notNull(),
+    content: jsonb().$type<JsonValue>().notNull(),
     initiativeId: varchar("initiative_id", { length: 191 }).notNull(),
     organizationId: varchar("organization_id", { length: 191 }).notNull(),
     sendEmail: boolean("send_email").default(true).notNull(),
@@ -753,9 +761,9 @@ export const feature = pgTable(
     apiKeyId: varchar("api_key_id", { length: 191 }),
     cannyId: varchar("canny_id", { length: 191 }),
     templateId: varchar("template_id", { length: 191 }),
-    canvas: json(),
+    canvas: jsonb().$type<JsonValue>(),
     releaseId: varchar("release_id", { length: 191 }),
-    content: json(),
+    content: jsonb().$type<JsonValue>(),
     vector: vector({ dimensions: 1536 }),
   },
   (table) => [
@@ -1355,7 +1363,7 @@ export const template = pgTable(
     creatorId: varchar("creator_id", { length: 191 }).notNull(),
     title: varchar({ length: 191 }).notNull(),
     description: varchar({ length: 191 }),
-    content: json(),
+    content: jsonb().$type<JsonValue>(),
   },
   (table) => [
     index("idx_33313_template_organizationId_idx").using(
@@ -1613,7 +1621,7 @@ export const changelog = pgTable(
     cannyId: varchar("canny_id", { length: 191 }),
     slug: varchar({ length: 191 }),
     fromMarkdown: boolean("from_markdown").default(false),
-    content: json(),
+    content: jsonb().$type<JsonValue>(),
     vector: vector({ dimensions: 1536 }),
   },
   (table) => [
@@ -1670,7 +1678,7 @@ export const feedback = pgTable(
       mode: "string",
     }).notNull(),
     title: text().notNull(),
-    content: json().notNull(),
+    content: jsonb().$type<JsonValue>().notNull(),
     organizationId: varchar("organization_id", { length: 191 }).notNull(),
     feedbackUserId: varchar("feedback_user_id", { length: 191 }),
     aiSentiment: feedbackAiSentiment("ai_sentiment"),
@@ -1687,7 +1695,7 @@ export const feedback = pgTable(
     }),
     videoUrl: varchar("video_url", { length: 191 }),
     audioUrl: varchar("audio_url", { length: 191 }),
-    transcript: json(),
+    transcript: jsonb().$type<JsonValue>(),
     transcribedAt: timestamp("transcribed_at", {
       precision: 6,
       withTimezone: true,

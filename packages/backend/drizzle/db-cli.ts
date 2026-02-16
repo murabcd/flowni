@@ -1,12 +1,15 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import { keys } from "../keys";
 import { schema } from "./schema";
 
 const env = keys();
 
-const client = postgres(env.POSTGRES_URL_NON_POOLING, {
-  prepare: false,
+const pool = new Pool({
+  connectionString: env.POSTGRES_URL_NON_POOLING,
+  max: 1,
+  idleTimeoutMillis: 10_000,
+  connectionTimeoutMillis: 2000,
 });
 
-export const dbCli = drizzle(client, { schema });
+export const dbCli = drizzle(pool, { schema });
