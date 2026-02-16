@@ -3,6 +3,7 @@
 import { FlowniRole } from "@repo/backend/auth";
 import { currentUser } from "@repo/backend/auth/utils";
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Initiative, InitiativeUpdate } from "@repo/backend/types";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import { parseError } from "@repo/lib/parse-error";
@@ -28,7 +29,10 @@ export const createInitiativeUpdateContent = async (
 
     const [update] = await database
       .update(tables.initiativeUpdate)
-      .set({ content: textToContent(""), updatedAt: new Date().toISOString() })
+      .set({
+        content: textToContent("") as JsonValue,
+        updatedAt: new Date().toISOString(),
+      })
       .where(
         and(
           eq(tables.initiativeUpdate.id, initiativeUpdateId),

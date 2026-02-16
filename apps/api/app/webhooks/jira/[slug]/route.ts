@@ -1,5 +1,6 @@
 import { createClient } from "@repo/atlassian";
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { logger, serializeError } from "@repo/lib/logger";
 import { parseError } from "@repo/lib/parse-error";
@@ -329,7 +330,7 @@ const handleIssueEvent = async (
       endAt,
       content:
         issueData.description && typeof issueData.description === "object"
-          ? (issueData.description as object)
+          ? (issueData.description as JsonValue)
           : undefined,
       updatedAt: new Date().toISOString(),
     })

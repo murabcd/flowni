@@ -13,7 +13,7 @@ import { removeChangelogTag } from "@/actions/changelog-tag/disconnect";
 
 type ChangelogTagsPickerProperties = {
   readonly changelogId: Changelog["id"];
-  readonly storedTags: ChangelogTag[];
+  readonly storedTags: Pick<ChangelogTag, "id" | "name">[];
   readonly defaultTags: string[];
 };
 

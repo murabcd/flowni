@@ -1,5 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import { experimental_transcribe as transcribe } from "ai";
 import { eq } from "drizzle-orm";
@@ -32,7 +33,7 @@ export const POST = async (request: Request): Promise<Response> => {
     .update(tables.feedback)
     .set({
       transcript: transcript.text,
-      content: textToContent(transcript.text ?? ""),
+      content: textToContent(transcript.text ?? "") as JsonValue,
       transcribedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     })

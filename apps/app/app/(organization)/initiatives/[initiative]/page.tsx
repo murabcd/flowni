@@ -5,6 +5,7 @@ import {
   getJsonColumnFromTable,
   tables,
 } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { Skeleton } from "@repo/design-system/components/precomposed/skeleton";
 import type { JSONContent } from "@repo/editor";
@@ -116,7 +117,7 @@ const Initiative = async (props: InitiativeProperties) => {
   );
 
   if (!content) {
-    const newContent = textToContent("");
+    const newContent = textToContent("") as JsonValue;
 
     await database
       .update(tables.initiativePage)

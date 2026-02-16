@@ -5,6 +5,7 @@ import {
   getJsonColumnFromTable,
   tables,
 } from "@repo/backend/database";
+import type { JSONContent } from "@repo/editor";
 import { contentToText } from "@repo/editor/lib/tiptap";
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
@@ -105,7 +106,7 @@ const ChangelogPage = async (props: ChangelogPageProperties) => {
           {content ? (
             <ChangelogEditor
               changelogId={changelog.id}
-              defaultValue={content}
+              defaultValue={content as JSONContent}
               editable={user.organizationRole !== FlowniRole.Member}
             />
           ) : (

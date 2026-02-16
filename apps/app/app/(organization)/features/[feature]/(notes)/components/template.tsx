@@ -2,6 +2,7 @@
 
 import type { Template as TemplateClass } from "@repo/backend/types";
 import { cn } from "@repo/design-system/lib/utils";
+import type { JSONContent } from "@repo/editor";
 import dynamic from "next/dynamic";
 import type { ReactNode } from "react";
 
@@ -49,7 +50,7 @@ export const Template = ({
     <div className="flex-1 overflow-hidden p-3">
       <div className="origin-top scale-50">
         <div className="-ml-[50%] h-[200%] w-[200%]">
-          <Editor defaultValue={content as object} editable={false} />
+          <Editor defaultValue={content as JSONContent} editable={false} />
         </div>
       </div>
     </div>

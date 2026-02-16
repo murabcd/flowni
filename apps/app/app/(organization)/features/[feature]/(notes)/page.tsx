@@ -5,6 +5,7 @@ import {
   getJsonColumnFromTable,
   tables,
 } from "@repo/backend/database";
+import type { JSONContent } from "@repo/editor";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { FeatureEditor } from "./components/feature-editor";
@@ -92,7 +93,7 @@ const FeaturePage = async (props: FeaturePageProperties) => {
         />
         {content ? (
           <FeatureEditor
-            defaultValue={content}
+            defaultValue={content as JSONContent}
             editable={user.organizationRole !== FlowniRole.Member}
             featureId={params.feature}
           />

@@ -20,6 +20,7 @@ import {
 import { Skeleton } from "@repo/design-system/components/precomposed/skeleton";
 import { StackCard } from "@repo/design-system/components/stack-card";
 import { cn } from "@repo/design-system/lib/utils";
+import type { JSONContent } from "@repo/editor";
 import { contentToText } from "@repo/editor/lib/tiptap";
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
@@ -184,7 +185,7 @@ const FeedbackPage = async (props: FeedbackPageProperties) => {
           </p>
         ) : (
           <FeedbackEditor
-            defaultValue={content}
+            defaultValue={content as JSONContent}
             editable={user.organizationRole !== FlowniRole.Member}
             feedbackId={params.feedback}
           >

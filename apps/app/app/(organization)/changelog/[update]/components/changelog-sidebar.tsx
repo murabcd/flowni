@@ -42,7 +42,9 @@ export const ChangelogSidebar = async ({
         .where(eq(tables.changelog.id, changelogId))
         .limit(1),
       currentMembers(),
-      database.select().from(tables.changelogTag),
+      database
+        .select({ id: tables.changelogTag.id, name: tables.changelogTag.name })
+        .from(tables.changelogTag),
       database
         .select({ userId: tables.changelogContributor.userId })
         .from(tables.changelogContributor)

@@ -3,6 +3,7 @@
 import { FlowniRole } from "@repo/backend/auth";
 import { currentOrganizationId, currentUser } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Changelog } from "@repo/backend/types";
 import {
   contentToText,
@@ -41,7 +42,7 @@ export const generateChangelog = async (
       await database
         .update(tables.changelog)
         .set({
-          content: textToContent(""),
+          content: textToContent("") as JsonValue,
           updatedAt: new Date().toISOString(),
         })
         .where(eq(tables.changelog.id, changelogId));
@@ -70,7 +71,7 @@ export const generateChangelog = async (
       .limit(1)
       .then((rows) => rows[0] ?? null);
 
-    let content: object = textToContent("");
+    let content: JsonValue = textToContent("") as JsonValue;
 
     if (lastChangelog) {
       const newlyCompletedFeatures = await database
@@ -118,7 +119,7 @@ export const generateChangelog = async (
           ].join("\n"),
         });
 
-        content = await markdownToContent(markdown.text);
+        content = (await markdownToContent(markdown.text)) as JsonValue;
       }
     }
 

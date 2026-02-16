@@ -5,6 +5,7 @@ import {
   getJsonColumnFromTable,
   tables,
 } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { JSONContent } from "@repo/editor";
 import { contentToText, textToContent } from "@repo/editor/lib/tiptap";
 import { eq } from "drizzle-orm";
@@ -85,7 +86,7 @@ const TemplatePage = async (props: TemplatePageProperties) => {
   );
 
   if (!content) {
-    const newContent = textToContent("");
+    const newContent = textToContent("") as JsonValue;
 
     await database
       .update(tables.template)

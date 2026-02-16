@@ -13,6 +13,7 @@ import {
 import type { Initiative, InitiativeUpdate } from "@repo/backend/types";
 import { StackCard } from "@repo/design-system/components/stack-card";
 import { Button } from "@repo/design-system/components/ui/button";
+import type { JSONContent } from "@repo/editor";
 import { contentToHtml, contentToText } from "@repo/editor/lib/tiptap";
 import { formatDate } from "@repo/lib/format";
 import { and, eq } from "drizzle-orm";
@@ -195,7 +196,7 @@ const InitiativeUpdatePage = async (props: InitiativeUpdatePageProperties) => {
         <StackCard className="grid gap-8 px-6 py-12">
           {hasContent ? (
             <InitiativeUpdateEditor
-              defaultValue={content}
+              defaultValue={content as JSONContent}
               editable={user.organizationRole !== FlowniRole.Member}
               initiativeUpdateId={params.update}
             />

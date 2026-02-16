@@ -1,5 +1,6 @@
 "use client";
 
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { InitiativePage } from "@repo/backend/types";
 import { handleError } from "@repo/design-system/lib/handle-error";
 import type { EditorInstance, JSONContent } from "@repo/editor";
@@ -38,7 +39,7 @@ export const InitiativePageEditor = ({
     }
 
     const json = editor.getJSON();
-    const content = staticify(json);
+    const content = staticify(json) as JsonValue;
 
     try {
       await updateInitiativePage(pageId, { content });

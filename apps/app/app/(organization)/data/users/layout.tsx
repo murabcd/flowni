@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { eq, sql } from "drizzle-orm";
 import type { ReactNode } from "react";
+import type { FeedbackUserCursor } from "@/actions/feedback-user/list";
 import { getFeedbackUsers } from "@/actions/feedback-user/list";
 import { FeedbackUsersList } from "./components/feedback-user-list";
 
@@ -40,11 +41,10 @@ const UsersDataLayout = async ({ children }: UsersDataLayoutProperties) => {
           throw response.error;
         }
 
-        return response.data;
+        return response;
       },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      initialPageParam: null as FeedbackUserCursor | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       pages: 1,
     }),
   ]);

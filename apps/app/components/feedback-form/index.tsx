@@ -1,5 +1,6 @@
 "use client";
 
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createSupabaseBrowserClient } from "@repo/backend/supabase/client";
 import type { FeedbackOrganization, FeedbackUser } from "@repo/backend/types";
 import {
@@ -237,7 +238,7 @@ export const FeedbackForm = ({
   const handleCreateText = async () => {
     const response = await createFeedback({
       title,
-      content: staticify(content),
+      content: staticify(content) as JsonValue,
       feedbackUserId,
     });
 

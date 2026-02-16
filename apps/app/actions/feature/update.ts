@@ -4,6 +4,7 @@ import { createClient } from "@repo/atlassian";
 import { FlowniRole } from "@repo/backend/auth";
 import { currentOrganizationId, currentUser } from "@repo/backend/auth/utils";
 import { getJsonColumnFromTable, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import atlassianTemplate from "@repo/editor/templates/atlassian.json";
 import loomTemplate from "@repo/editor/templates/loom.json";
@@ -96,8 +97,8 @@ export const updateFeature = async (
     Partial<typeof tables.feature.$inferSelect>,
     "content" | "canvas"
   > & {
-    canvas?: object;
-    content?: object;
+    canvas?: JsonValue;
+    content?: JsonValue;
   }
 ): Promise<{
   error?: string;
@@ -195,21 +196,21 @@ export const updateFeatureFromTemplate = async (
       throw new Error("You don't have permission to update features");
     }
 
-    let content = textToContent("");
+    let content = textToContent("") as JsonValue;
 
     switch (templateId) {
       case "atlassian": {
-        content = atlassianTemplate;
+        content = atlassianTemplate as unknown as JsonValue;
 
         break;
       }
       case "notion": {
-        content = notionTemplate;
+        content = notionTemplate as unknown as JsonValue;
 
         break;
       }
       case "loom": {
-        content = loomTemplate;
+        content = loomTemplate as unknown as JsonValue;
 
         break;
       }
@@ -233,7 +234,7 @@ export const updateFeatureFromTemplate = async (
           );
 
           if (templateContent) {
-            content = templateContent as object;
+            content = templateContent as JsonValue;
           }
         }
       }

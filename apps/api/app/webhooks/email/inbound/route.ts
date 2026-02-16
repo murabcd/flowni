@@ -1,4 +1,5 @@
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { htmlToContent } from "@repo/editor/lib/tiptap";
 import { getGravatarUrl } from "@repo/lib/gravatar";
@@ -165,7 +166,7 @@ export const POST = async (request: Request): Promise<Response> => {
     {
       id: createId(),
       organizationId,
-      content: htmlToContent(parse.data.HtmlBody),
+      content: htmlToContent(parse.data.HtmlBody) as JsonValue,
       title: parse.data.Subject,
       source: "EMAIL",
       feedbackUserId: feedbackUser.id,

@@ -131,8 +131,21 @@ const loadFeedbackPanelData = async (feedbackId: Feedback["id"]) => {
         .where(eq(tables.feedback.id, feedbackId))
         .limit(1)
         .then((rows) => rows[0] ?? null),
-      database.select().from(tables.feedbackUser),
-      database.select().from(tables.feedbackOrganization),
+      database
+        .select({
+          id: tables.feedbackUser.id,
+          name: tables.feedbackUser.name,
+          imageUrl: tables.feedbackUser.imageUrl,
+          email: tables.feedbackUser.email,
+        })
+        .from(tables.feedbackUser),
+      database
+        .select({
+          id: tables.feedbackOrganization.id,
+          name: tables.feedbackOrganization.name,
+          domain: tables.feedbackOrganization.domain,
+        })
+        .from(tables.feedbackOrganization),
     ]
   );
 

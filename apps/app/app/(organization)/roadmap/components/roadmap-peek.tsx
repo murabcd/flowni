@@ -1,4 +1,3 @@
-import type { User } from "@repo/backend/auth";
 import { getUserName } from "@repo/backend/auth/format";
 import type {
   Feature,
@@ -16,6 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/design-system/components/ui/sheet";
+import type { JSONContent } from "@repo/editor";
 import { formatDate } from "@repo/lib/format";
 import { ClockIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
@@ -38,7 +38,12 @@ type RoadmapPeekProps = {
         readonly initiatives: Pick<Initiative, "id" | "title">[];
       })
     | undefined;
-  readonly owner?: User;
+  readonly owner?: {
+    readonly id: string;
+    readonly email?: string | null;
+    readonly name?: string | null;
+    readonly image?: string | null;
+  };
 };
 
 export const RoadmapPeek = ({
@@ -99,7 +104,7 @@ export const RoadmapPeek = ({
         {feature?.content ? (
           <FeatureEditor
             className="prose-sm"
-            defaultValue={feature.content as object}
+            defaultValue={feature.content as JSONContent}
             editable={editable}
             featureId={feature.id}
           />

@@ -2,6 +2,7 @@
 
 import { createClient } from "@repo/atlassian";
 import { getJsonColumnFromTable, tables } from "@repo/backend/database";
+import type { JSONContent } from "@repo/editor";
 import { convertToAdf } from "@repo/editor/lib/jira";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import { parseError } from "@repo/lib/parse-error";
@@ -60,7 +61,7 @@ export const createJiraIssue = async ({
       feature.id
     );
 
-    const body = content ?? textToContent("");
+    const body = (content ?? textToContent("")) as JSONContent;
     const atlassian = createClient(installation);
     const response = await atlassian.POST("/rest/api/2/issue", {
       body: {

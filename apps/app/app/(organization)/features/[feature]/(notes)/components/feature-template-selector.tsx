@@ -1,5 +1,6 @@
 "use client";
 
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Feature } from "@repo/backend/types";
 import { Button } from "@repo/design-system/components/ui/button";
 import { handleError } from "@repo/design-system/lib/handle-error";
@@ -23,19 +24,19 @@ const defaultTemplates: TemplateProperties[] = [
     id: "atlassian",
     title: "Atlassian",
     description: "Atlassian's PRD template.",
-    content: atlassianTemplate,
+    content: atlassianTemplate as unknown as JsonValue,
   },
   {
     id: "notion",
     title: "Notion",
     description: "Notion's PRD template.",
-    content: notionTemplate,
+    content: notionTemplate as unknown as JsonValue,
   },
   {
     id: "loom",
     title: "Loom",
     description: "Loom's PRD template.",
-    content: loomTemplate,
+    content: loomTemplate as unknown as JsonValue,
   },
 ];
 

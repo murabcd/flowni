@@ -1,4 +1,5 @@
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import { asc, eq } from "drizzle-orm";
@@ -83,7 +84,7 @@ export const POST = async (request: Request): Promise<Response> => {
       statusId: featureStatus.id,
       source: "API",
       apiKeyId: apiKey.id,
-      content: textToContent(parse.data.text),
+      content: textToContent(parse.data.text) as JsonValue,
       createdAt: now,
       updatedAt: now,
     },

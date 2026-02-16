@@ -7,6 +7,7 @@ import {
   getJsonColumnFromTable,
   tables,
 } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import type { Feature, Template } from "@repo/backend/types";
 import { textToContent } from "@repo/editor/lib/tiptap";
@@ -16,7 +17,7 @@ import { eq } from "drizzle-orm";
 export const createTemplate = async (
   title: Template["title"],
   description: Template["description"],
-  content?: object
+  content?: JsonValue
 ): Promise<
   | {
       id: Template["id"];
@@ -53,7 +54,7 @@ export const createTemplate = async (
         description,
         organizationId,
         creatorId: user.id,
-        content: content ?? textToContent(""),
+        content: content ?? (textToContent("") as JsonValue),
       },
     ]);
 
@@ -117,7 +118,7 @@ export const createTemplateFromFeature = async (
         description,
         organizationId,
         creatorId: user.id,
-        content: content ?? textToContent(""),
+        content: content ?? (textToContent("") as JsonValue),
       },
     ]);
 

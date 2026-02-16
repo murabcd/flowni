@@ -9,8 +9,7 @@ import {
 } from "@repo/backend/database";
 import type { Feature } from "@repo/backend/types";
 import { contentToText } from "@repo/editor/lib/tiptap";
-import { FEEDBACK_PAGE_SIZE } from "@repo/lib/consts";
-import { desc } from "drizzle-orm";
+import { and, desc, eq, lt, or } from "drizzle-orm";
 
 export type GetFeatureResponse = Pick<
   Feature,
@@ -24,8 +23,13 @@ export type GetFeatureResponse = Pick<
   } | null;
 };
 
+export type FeatureCursor = {
+  readonly createdAt: string;
+  readonly id: string;
+};
+
 export const getFeature = async (
-  page: number
+  cursor?: FeatureCursor | null
 ): Promise<
   | {
       data: GetFeatureResponse;
@@ -35,7 +39,17 @@ export const getFeature = async (
     }
 > => {
   try {
-    const feature = await database
+    const cursorCondition = cursor
+      ? or(
+          lt(tables.feature.createdAt, cursor.createdAt),
+          and(
+            eq(tables.feature.createdAt, cursor.createdAt),
+            lt(tables.feature.id, cursor.id)
+          )
+        )
+      : undefined;
+
+    const baseQuery = database
       .select({
         id: tables.feature.id,
         title: tables.feature.title,
@@ -44,10 +58,13 @@ export const getFeature = async (
         ownerId: tables.feature.ownerId,
       })
       .from(tables.feature)
-      .orderBy(desc(tables.feature.createdAt))
-      .limit(FEEDBACK_PAGE_SIZE)
-      .offset(page * FEEDBACK_PAGE_SIZE)
-      .then((rows) => rows[0] ?? null);
+      .orderBy(desc(tables.feature.createdAt), desc(tables.feature.id))
+      .limit(1);
+
+    const feature = await (cursorCondition
+      ? baseQuery.where(cursorCondition)
+      : baseQuery
+    ).then((rows) => rows[0] ?? null);
 
     const members = await currentMembers();
 

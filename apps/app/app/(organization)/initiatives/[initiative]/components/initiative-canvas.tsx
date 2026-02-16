@@ -1,5 +1,6 @@
 "use client";
 
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { InitiativeCanvas } from "@repo/backend/types";
 import type { CanvasState } from "@repo/canvas";
 import { handleError } from "@repo/design-system/lib/handle-error";
@@ -39,7 +40,7 @@ export const InitiativeCanvasLoader = ({
   const handleSave = async (snapshot: CanvasState) => {
     try {
       await updateInitiativeCanvas(initiativeCanvasId, {
-        content: snapshot,
+        content: snapshot as unknown as JsonValue,
       });
     } catch (error) {
       handleError(error);

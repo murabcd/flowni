@@ -1,5 +1,6 @@
 "use client";
 
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { CanvasState } from "@repo/canvas";
 import { handleError } from "@repo/design-system/lib/handle-error";
 import dynamic from "next/dynamic";
@@ -35,7 +36,7 @@ export const FeatureCanvasLoader = ({
   const handleSave = async (snapshot: CanvasState) => {
     try {
       await updateFeature(featureId, {
-        canvas: snapshot,
+        canvas: snapshot as unknown as JsonValue,
       });
     } catch (error) {
       handleError(error);

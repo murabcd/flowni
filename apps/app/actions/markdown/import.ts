@@ -2,6 +2,7 @@
 
 import { currentOrganizationId, currentUser } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { markdownToContent } from "@repo/editor/lib/tiptap";
 import { parseError } from "@repo/lib/parse-error";
@@ -75,7 +76,7 @@ export const importMarkdown = async (
     for (const changelog of changelogs) {
       const { tags } = changelog;
       const content = changelog.content
-        ? await markdownToContent(changelog.content)
+        ? ((await markdownToContent(changelog.content)) as JsonValue)
         : undefined;
 
       const createdAt =

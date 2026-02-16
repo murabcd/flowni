@@ -12,7 +12,7 @@ import type {
   Product,
 } from "@repo/backend/types";
 import { FEEDBACK_PAGE_SIZE } from "@repo/lib/consts";
-import { and, count, desc, eq, ilike, inArray } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, lt, or } from "drizzle-orm";
 import { database } from "@/lib/database";
 
 export type GetFeaturesResponse = (Pick<
@@ -34,10 +34,12 @@ export type GetFeaturesResponse = (Pick<
   _count: {
     feedback: number;
   };
-  meta: {
-    total: number;
-  };
 })[];
+
+export type FeatureCursor = {
+  readonly createdAt: string;
+  readonly id: string;
+};
 
 export type FeatureFilters = {
   search?: string;
@@ -47,11 +49,13 @@ export type FeatureFilters = {
 };
 
 export const getFeatures = async (
-  page: number,
+  cursor?: FeatureCursor | null,
   filters?: FeatureFilters
 ): Promise<
   | {
       data: GetFeaturesResponse;
+      nextCursor: FeatureCursor | null;
+      total: number;
     }
   | {
       error: unknown;
@@ -64,33 +68,47 @@ export const getFeatures = async (
       throw new Error("Organization not found");
     }
 
-    const conditions = [eq(tables.feature.organizationId, organizationId)];
+    const baseConditions = [eq(tables.feature.organizationId, organizationId)];
 
     if (filters?.search) {
-      conditions.push(ilike(tables.feature.title, `%${filters.search}%`));
+      baseConditions.push(ilike(tables.feature.title, `%${filters.search}%`));
     }
 
     if (filters?.productId) {
-      conditions.push(eq(tables.feature.productId, filters.productId));
+      baseConditions.push(eq(tables.feature.productId, filters.productId));
     }
 
     if (filters?.groupId) {
-      conditions.push(eq(tables.feature.groupId, filters.groupId));
+      baseConditions.push(eq(tables.feature.groupId, filters.groupId));
     }
 
     if (filters?.statusId) {
-      conditions.push(eq(tables.feature.statusId, filters.statusId));
+      baseConditions.push(eq(tables.feature.statusId, filters.statusId));
     }
 
-    const whereClause =
-      conditions.length > 1 ? and(...conditions) : conditions[0];
+    const cursorCondition = cursor
+      ? or(
+          lt(tables.feature.createdAt, cursor.createdAt),
+          and(
+            eq(tables.feature.createdAt, cursor.createdAt),
+            lt(tables.feature.id, cursor.id)
+          )
+        )
+      : undefined;
+    const dataConditions = cursorCondition
+      ? [...baseConditions, cursorCondition]
+      : baseConditions;
+    const baseWhereClause =
+      baseConditions.length > 1 ? and(...baseConditions) : baseConditions[0];
+    const dataWhereClause =
+      dataConditions.length > 1 ? and(...dataConditions) : dataConditions[0];
 
     const [total, features] = await Promise.all([
       database
         .select({ count: count() })
         .from(tables.feature)
-        .where(whereClause)
-        .then((rows) => rows[0]?.count ?? 0),
+        .where(baseWhereClause)
+        .then((rows) => Number(rows[0]?.count ?? 0)),
       database
         .select({
           id: tables.feature.id,
@@ -138,13 +156,22 @@ export const getFeatures = async (
           eq(tables.feature.productId, tables.product.id)
         )
         .leftJoin(tables.group, eq(tables.feature.groupId, tables.group.id))
-        .where(whereClause)
-        .orderBy(desc(tables.feature.createdAt))
-        .limit(FEEDBACK_PAGE_SIZE)
-        .offset(page * FEEDBACK_PAGE_SIZE),
+        .where(dataWhereClause)
+        .orderBy(desc(tables.feature.createdAt), desc(tables.feature.id))
+        .limit(FEEDBACK_PAGE_SIZE + 1),
     ]);
 
-    const featureIds = features.map((feature) => feature.id);
+    const hasNextPage = features.length > FEEDBACK_PAGE_SIZE;
+    const items = hasNextPage
+      ? features.slice(0, FEEDBACK_PAGE_SIZE)
+      : features;
+    const lastItem = items.at(-1);
+    const nextCursor =
+      hasNextPage && lastItem
+        ? { createdAt: lastItem.createdAt, id: lastItem.id }
+        : null;
+
+    const featureIds = items.map((feature) => feature.id);
     const feedbackCounts = featureIds.length
       ? await database
           .select({
@@ -159,7 +186,7 @@ export const getFeatures = async (
       feedbackCounts.map((item) => [item.featureId, item.count])
     );
 
-    const data: GetFeaturesResponse = features.map((feature) => ({
+    const data: GetFeaturesResponse = items.map((feature) => ({
       id: feature.id,
       title: feature.title,
       createdAt: feature.createdAt,
@@ -208,12 +235,9 @@ export const getFeatures = async (
       _count: {
         feedback: feedbackCountMap.get(feature.id) ?? 0,
       },
-      meta: {
-        total,
-      },
     }));
 
-    return { data };
+    return { data, nextCursor, total };
   } catch (error) {
     return { error };
   }

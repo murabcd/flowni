@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@repo/backend/auth";
 import type {
   Feature,
   FeatureStatus,
@@ -45,6 +44,7 @@ import { deleteMarker } from "@/actions/roadmap-event/delete";
 import { FeatureItemInner } from "@/components/roadmap-item";
 import { StatusLegend } from "@/components/status-legend";
 import { useRoadmap } from "@/hooks/use-roadmap";
+import type { MemberInfo } from "@/lib/serialization";
 import { RoadmapAddFeature } from "./roadmap-add-feature";
 import { RoadmapMarkerDialog } from "./roadmap-marker-dialog";
 import { RoadmapPeek } from "./roadmap-peek";
@@ -136,7 +136,7 @@ const buildRoadmapGroups = (
   }
 
   return Object.fromEntries(
-    Object.entries(groupedData).sort(([nameA], [nameB]) =>
+    [...Object.entries(groupedData)].sort(([nameA], [nameB]) =>
       nameA.localeCompare(nameB)
     )
   );
@@ -160,7 +160,7 @@ export type RoadmapEditorProperties = {
   })[];
   readonly markers: (Pick<RoadmapEvent, "id" | "text"> & { date: Date })[];
   readonly editable: boolean;
-  readonly members: User[];
+  readonly members: MemberInfo[];
 };
 
 export const RoadmapEditor = ({

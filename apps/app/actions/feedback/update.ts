@@ -3,6 +3,7 @@
 import { FlowniRole } from "@repo/backend/auth";
 import { currentUser } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Feedback } from "@repo/backend/types";
 import { parseError } from "@repo/lib/parse-error";
 import { desc, eq } from "drizzle-orm";
@@ -12,7 +13,7 @@ import { database } from "@/lib/database";
 export const updateFeedback = async (
   feedbackId: Feedback["id"],
   data: Omit<Partial<Feedback>, "content" | "transcript"> & {
-    content?: object;
+    content?: JsonValue;
   }
 ): Promise<
   | {

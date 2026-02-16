@@ -2,6 +2,7 @@
 
 import { currentOrganizationId, currentUser } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import type { Feedback } from "@repo/backend/types";
 import { textToContent } from "@repo/editor/lib/tiptap";
@@ -13,7 +14,7 @@ import { database } from "@/lib/database";
 type CreateFeedbackProperties = {
   title: Feedback["title"];
   feedbackUserId: Feedback["feedbackUserId"];
-  content?: object;
+  content?: JsonValue;
   audioUrl?: Feedback["audioUrl"];
   videoUrl?: Feedback["videoUrl"];
 };
@@ -56,7 +57,7 @@ export const createFeedback = async ({
       {
         id,
         title,
-        content: content ?? textToContent(""),
+        content: content ?? (textToContent("") as JsonValue),
         organizationId,
         feedbackUserId,
         audioUrl,

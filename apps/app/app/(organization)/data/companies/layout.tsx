@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { eq, sql } from "drizzle-orm";
 import type { ReactNode } from "react";
+import type { FeedbackOrganizationCursor } from "@/actions/feedback-organization/list";
 import { getFeedbackCompanies } from "@/actions/feedback-organization/list";
 import { FeedbackCompanyList } from "./components/feedback-company-list";
 
@@ -43,11 +44,10 @@ const CompaniesDataLayout = async ({
           throw response.error;
         }
 
-        return response.data;
+        return response;
       },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      initialPageParam: null as FeedbackOrganizationCursor | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       pages: 1,
     }),
   ]);

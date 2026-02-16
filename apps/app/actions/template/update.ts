@@ -7,6 +7,7 @@ import {
   getJsonColumnFromTable,
   tables,
 } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Feature, Template } from "@repo/backend/types";
 import { parseError } from "@repo/lib/parse-error";
 import { eq } from "drizzle-orm";
@@ -15,7 +16,7 @@ import { revalidatePath } from "next/cache";
 export const updateTemplate = async (
   id: Template["id"],
   data: Omit<Partial<Template>, "content"> & {
-    content?: object;
+    content?: JsonValue;
   }
 ): Promise<{
   error?: string;

@@ -8,6 +8,7 @@ import {
   currentUser,
 } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Initiative, InitiativeUpdate } from "@repo/backend/types";
 import { markdownToContent, textToContent } from "@repo/editor/lib/tiptap";
 import { parseError } from "@repo/lib/parse-error";
@@ -57,7 +58,7 @@ export const generateInitiativeUpdateContent = async (
       .limit(1)
       .then((rows) => rows[0] ?? null);
 
-    let content: object = textToContent("");
+    let content: JsonValue = textToContent("") as JsonValue;
 
     if (lastUpdate) {
       const [initiative, members] = await Promise.all([
@@ -191,7 +192,7 @@ export const generateInitiativeUpdateContent = async (
           ].join("\n"),
         });
 
-        content = await markdownToContent(markdown.text);
+        content = (await markdownToContent(markdown.text)) as JsonValue;
       }
     }
 

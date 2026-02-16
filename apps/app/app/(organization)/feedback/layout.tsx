@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { eq, sql } from "drizzle-orm";
 import type { ReactNode } from "react";
+import type { FeedbackCursor } from "@/actions/feedback/get";
 import { getFeedback } from "@/actions/feedback/get";
 import { Header } from "@/components/header";
 import { CreateFeedbackButton } from "./components/create-feedback-button";
@@ -38,17 +39,16 @@ const FeedbackLayout = async ({ children }: FeedbackLayoutProperties) => {
     queryClient.prefetchInfiniteQuery({
       queryKey: ["feedback", false],
       queryFn: async ({ pageParam }) => {
-        const response = await getFeedback(pageParam, false);
+        const response = await getFeedback(false, pageParam);
 
         if ("error" in response) {
           throw response.error;
         }
 
-        return response.data;
+        return response;
       },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      initialPageParam: null as FeedbackCursor | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       pages: 1,
     }),
   ]);

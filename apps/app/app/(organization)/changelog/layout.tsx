@@ -60,11 +60,10 @@ const ChangelogLayout = async ({ children }: ChangelogLayoutProperties) => {
           throw response.error;
         }
 
-        return response.data;
+        return response;
       },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParameter) =>
-        lastPage.length === 0 ? undefined : lastPageParameter + 1,
+      initialPageParam: null as { publishAt: string; id: string } | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       pages: 1,
     }),
   ]);

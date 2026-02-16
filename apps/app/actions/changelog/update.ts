@@ -3,6 +3,7 @@
 import { FlowniRole } from "@repo/backend/auth";
 import { currentUser } from "@repo/backend/auth/utils";
 import { database, tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { Changelog } from "@repo/backend/types";
 import { parseError } from "@repo/lib/parse-error";
 import { eq } from "drizzle-orm";
@@ -11,7 +12,7 @@ import { revalidatePath } from "next/cache";
 export const updateChangelog = async (
   changelogId: Changelog["id"],
   data: Omit<Partial<Changelog>, "content"> & {
-    content?: object;
+    content?: JsonValue;
   }
 ): Promise<{
   error?: string;

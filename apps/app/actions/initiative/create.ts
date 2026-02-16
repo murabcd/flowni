@@ -3,6 +3,7 @@
 import { FlowniRole } from "@repo/backend/auth";
 import { currentOrganizationId, currentUser } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import { createId } from "@repo/backend/id";
 import { textToContent } from "@repo/editor/lib/tiptap";
 import { parseError } from "@repo/lib/parse-error";
@@ -67,7 +68,7 @@ export const createInitiative = async (
         initiativeId: id,
         organizationId,
         default: true,
-        content: textToContent(""),
+        content: textToContent("") as JsonValue,
         createdAt: now,
         updatedAt: now,
       },

@@ -24,8 +24,11 @@ type FeedbackSettingsDropdownProperties = {
   readonly feedbackId: Feedback["id"];
   readonly defaultFeedbackUserId: string | undefined;
   readonly defaultFeedbackOrganizationId: string | undefined;
-  readonly users: FeedbackUser[];
-  readonly organizations: FeedbackOrganization[];
+  readonly users: Pick<FeedbackUser, "email" | "id" | "imageUrl" | "name">[];
+  readonly organizations: Pick<
+    FeedbackOrganization,
+    "domain" | "id" | "name"
+  >[];
 };
 
 export const FeedbackSettingsDropdown = ({

@@ -3,6 +3,7 @@
 import { FlowniRole } from "@repo/backend/auth";
 import { currentUser } from "@repo/backend/auth/utils";
 import { tables } from "@repo/backend/database";
+import type { JsonValue } from "@repo/backend/drizzle/schema";
 import type { InitiativePage } from "@repo/backend/types";
 import { parseError } from "@repo/lib/parse-error";
 import { eq } from "drizzle-orm";
@@ -11,7 +12,7 @@ import { database } from "@/lib/database";
 export const updateInitiativePage = async (
   pageId: InitiativePage["id"],
   data: Omit<Partial<InitiativePage>, "content"> & {
-    content?: object;
+    content?: JsonValue;
   }
 ): Promise<{
   error?: string;
