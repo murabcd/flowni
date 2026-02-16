@@ -14,6 +14,7 @@ export const Digest = async () => {
   }
 
   const lastDay = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const lastDayIso = lastDay.toISOString();
 
   try {
     const [feedbackCount, featureCount, aiDigest] = await Promise.all([
@@ -23,7 +24,7 @@ export const Digest = async () => {
         .where(
           and(
             eq(tables.feedback.organizationId, organizationId),
-            gte(tables.feedback.createdAt, lastDay)
+            gte(tables.feedback.createdAt, lastDayIso)
           )
         )
         .then((rows) => rows[0]?.value ?? 0),
@@ -33,7 +34,7 @@ export const Digest = async () => {
         .where(
           and(
             eq(tables.feature.organizationId, organizationId),
-            gte(tables.feature.createdAt, lastDay)
+            gte(tables.feature.createdAt, lastDayIso)
           )
         )
         .then((rows) => rows[0]?.value ?? 0),
