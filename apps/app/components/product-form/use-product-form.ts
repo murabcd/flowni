@@ -17,7 +17,7 @@ export const useProductForm = create<ProductFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:product-form",
+      name: "portal:product-form",
     }
   )
 );

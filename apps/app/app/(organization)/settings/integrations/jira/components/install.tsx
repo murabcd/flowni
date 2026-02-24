@@ -36,7 +36,7 @@ export const InstallJira = async () => {
           Install Jira
         </h1>
         <p className="mt-2 mb-0 text-muted-foreground">
-          Follow the steps below to integrate Jira with Flowni. This assumes you
+          Follow the steps below to integrate Jira with Portal. This assumes you
           already have a Atlassian account. If you don&apos;t, head to the{" "}
           <a
             className="text-primary underline"
@@ -57,11 +57,11 @@ export const InstallJira = async () => {
           </p>
 
           <div className="rounded-md bg-secondary px-4 py-3">
-            <p>https://flowni.atlassian.net/plugins/servlet/webhooks</p>
+            <p>https://portal.atlassian.net/plugins/servlet/webhooks</p>
           </div>
 
           <p>
-            Create a new webhook with the name "Flowni" and the following
+            Create a new webhook with the name "Portal" and the following
             endpoint URL:
           </p>
 
@@ -94,7 +94,7 @@ export const InstallJira = async () => {
             >
               API tokens page
             </a>{" "}
-            and click "Create a new API token". Give it a name, like "Flowni"
+            and click "Create a new API token". Give it a name, like "Portal"
             and select an expiration date. Then, press "Create".
           </p>
         </Prose>

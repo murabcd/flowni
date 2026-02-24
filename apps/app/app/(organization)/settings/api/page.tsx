@@ -58,7 +58,7 @@ const APIPage = async () => {
             </SheetTrigger>
             <SheetContent className="overflow-y-auto sm:max-w-md">
               <SheetHeader>
-                <SheetTitle>Flowni API</SheetTitle>
+                <SheetTitle>Portal API</SheetTitle>
                 <SheetDescription asChild>
                   <div>
                     <APIDocumentation />

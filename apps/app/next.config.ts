@@ -25,7 +25,7 @@ let nextConfig: NextConfig = withBackend({
       },
       {
         source: "/api/webhooks/:path*",
-        destination: "https://api.flowni.ai/webhooks/:path*",
+        destination: "https://api.portal.ai/webhooks/:path*",
         permanent: true,
       },
       {

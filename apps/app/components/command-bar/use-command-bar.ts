@@ -17,7 +17,7 @@ export const useCommandBar = create<CommandBarState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:command-bar",
+      name: "portal:command-bar",
     }
   )
 );

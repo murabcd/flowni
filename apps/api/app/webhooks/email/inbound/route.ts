@@ -67,9 +67,9 @@ const messageSchema = z.object({
   ),
 });
 
-const inboundEmailRegex = /org_([a-zA-Z0-9]+)@inbound\.flowni\.ai/;
+const inboundEmailRegex = /org_([a-zA-Z0-9]+)@inbound\.portal\.ai/;
 
-// Should come in from reply+{organizationId}@inbound.flowni.ai
+// Should come in from reply+{organizationId}@inbound.portal.ai
 export const POST = async (request: Request): Promise<Response> => {
   const body = (await request.json()) as object;
   const parse = messageSchema.safeParse(body);

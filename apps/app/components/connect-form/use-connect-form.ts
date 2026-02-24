@@ -32,7 +32,7 @@ export const useConnectForm = create<ConnectFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:connect-form",
+      name: "portal:connect-form",
     }
   )
 );

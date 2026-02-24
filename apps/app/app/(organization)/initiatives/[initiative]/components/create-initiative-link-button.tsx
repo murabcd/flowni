@@ -13,13 +13,13 @@ import { useState } from "react";
 import { createInitiativeLink } from "@/actions/initiative-link/create";
 import DropboxIcon from "@/public/dropbox.svg";
 import FigmaIcon from "@/public/figma.svg";
-import FlowniIcon from "@/public/flowni.svg";
 import GitLabIcon from "@/public/gitlab.svg";
 import GoogleDriveIcon from "@/public/google-drive.svg";
 import JiraIcon from "@/public/jira.svg";
 import MiroIcon from "@/public/miro.svg";
 import NotionIcon from "@/public/notion.svg";
 import PitchIcon from "@/public/pitch.svg";
+import FlowniIcon from "@/public/portal.svg";
 import WhimsicalIcon from "@/public/whimsical.svg";
 import ZoomIcon from "@/public/zoom.svg";
 
@@ -33,8 +33,8 @@ export const externalLinkProperties: {
   icon: StaticImageData;
 }[] = [
   {
-    value: "flowni",
-    regex: /flowni.ai/u,
+    value: "portal",
+    regex: /portal.ai/u,
     icon: FlowniIcon as StaticImageData,
   },
   {

@@ -191,7 +191,7 @@
   }
 }
 
-/* This layer is for Flowni */
+/* This layer is for Portal */
 ::selection {
   @apply bg-violet-500 text-white;
 }

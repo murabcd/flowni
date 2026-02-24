@@ -20,7 +20,7 @@ export const UpdateEmptyState = ({
       id: "ai",
       label: "Generate with AI",
       description:
-        "Flowni will generate an update for you based on your roadmap.",
+        "Portal will generate an update for you based on your roadmap.",
       icon: SparklesIcon,
       disabled: loading,
     },

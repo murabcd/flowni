@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 const title = "Privacy Policy";
 const description =
-  "Your privacy is important to us. It is Flowni's policy to respect your privacy and comply with any applicable law and regulation regarding any personal information we may collect about you, including across our website and other sites we own and operate.";
+  "Your privacy is important to us. It is Portal's policy to respect your privacy and comply with any applicable law and regulation regarding any personal information we may collect about you, including across our website and other sites we own and operate.";
 
 export const metadata: Metadata = {
   title,
@@ -208,8 +208,8 @@ const Privacy = () => (
       </li>
     </ul>
     <p>
-      The Flowni Subprocessor List identifies subprocessors authorized to
-      subprocess customer or personal data on behalf of Flowni to provide
+      The Portal Subprocessor List identifies subprocessors authorized to
+      subprocess customer or personal data on behalf of Portal to provide
       services to our customers.
     </p>
     <table>
@@ -395,7 +395,7 @@ const Privacy = () => (
       The GDPR distinguishes between organisations that process personal
       information for their own purposes (known as “data controllers”) and
       organizations that process personal information on behalf of other
-      organizations (known as “data processors”). We, Flowni, located at the
+      organizations (known as “data processors”). We, Portal, located at the
       address provided in our Contact Us section, are a Data Controller with
       respect to the personal information you provide to us.
     </p>

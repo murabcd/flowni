@@ -1,10 +1,10 @@
 (() => {
   const id = window.FlowniWidgetId;
-  const apiUrl = window.FlowniApiUrl ?? "https://api.flowni.ai";
+  const apiUrl = window.FlowniApiUrl ?? "https://api.portal.ai";
   const darkMode = window.FlowniWidgetDarkMode ?? false;
 
   if (!id) {
-    throw new Error("Flowni Widget ID is required");
+    throw new Error("Portal Widget ID is required");
   }
 
   const triggerUrl = new URL("/trigger", apiUrl);

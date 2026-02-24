@@ -10,7 +10,7 @@ let nextConfig: NextConfig = withBackend({
     return [
       {
         source: "/",
-        destination: "https://www.flowni.ai/",
+        destination: "https://www.portal.ai/",
         permanent: true,
       },
     ];

@@ -39,7 +39,7 @@ const ContributorAvatar = async ({ userId }: { readonly userId: string }) => {
     <AvatarTooltip
       fallback="E"
       src={user.image ?? ""}
-      subtitle="Flowni team"
+      subtitle="Portal team"
       title={getUserName(user)}
     />
   );
@@ -97,7 +97,7 @@ const SignInPage = async () => {
             By signing in, you agree to our{" "}
             <a
               className="font-medium text-primary underline"
-              href="https://www.flowni.ai/legal/terms"
+              href="https://www.portal.ai/legal/terms"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -106,7 +106,7 @@ const SignInPage = async () => {
             and{" "}
             <a
               className="font-medium text-primary underline"
-              href="https://www.flowni.ai/legal/privacy"
+              href="https://www.portal.ai/legal/privacy"
               rel="noreferrer noopener"
               target="_blank"
             >

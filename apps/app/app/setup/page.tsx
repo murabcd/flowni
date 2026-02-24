@@ -25,7 +25,7 @@ const SetupPage = async () => {
       <div className="w-full max-w-[400px] space-y-8">
         <CreateOrganizationForm />
         <p className="text-center text-muted-foreground text-sm">
-          Is your organization already using Flowni? Sign in with the same
+          Is your organization already using Portal? Sign in with the same
           GitHub account to join.
         </p>
       </div>

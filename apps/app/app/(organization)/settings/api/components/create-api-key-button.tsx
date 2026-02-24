@@ -47,7 +47,7 @@ export const CreateAPIKeyButton = () => {
   return (
     <Dialog
       cta="Create Key"
-      description="API keys are used to authenticate your requests to the Flowni API."
+      description="API keys are used to authenticate your requests to the Portal API."
       disabled={disabled}
       onClick={handleCreateKey}
       onOpenChange={setOpen}

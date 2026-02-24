@@ -76,7 +76,7 @@ export const createJiraIssue = async ({
           issuetype: {
             id: typeId,
           },
-          labels: ["flowni"],
+          labels: ["portal"],
           project: {
             id: projectId,
           },

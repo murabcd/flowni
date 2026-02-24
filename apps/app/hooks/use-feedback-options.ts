@@ -15,7 +15,7 @@ export const useFeedbackOptions = create<FeedbackOptions>()(
           set((state) => ({ showProcessed: !state.showProcessed })),
       }),
       {
-        name: "flowni-feedback-options",
+        name: "portal-feedback-options",
       }
     )
   )

@@ -17,7 +17,7 @@ export const useReleaseForm = create<ReleaseFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:release-form",
+      name: "portal:release-form",
     }
   )
 );

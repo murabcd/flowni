@@ -8,7 +8,7 @@ import { Hero } from "./components/hero";
 export const metadata: Metadata = createMetadata({
   title: "Build your product roadmap at lightspeed",
   description:
-    "Flowni is a home for product teams to explore problems, ideate solutions, prioritize features and plan roadmaps with the help of AI.",
+    "Portal is a home for product teams to explore problems, ideate solutions, prioritize features and plan roadmaps with the help of AI.",
 });
 
 const Home = async (): Promise<ReactElement> => {

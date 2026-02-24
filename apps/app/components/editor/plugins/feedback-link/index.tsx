@@ -13,7 +13,7 @@ const flowniLinkRegex = new RegExp(
 );
 
 export const feedbackLink = Node.create({
-  name: "flowni-feedback-link",
+  name: "portal-feedback-link",
   atom: true,
   group: "block",
   inline: false,

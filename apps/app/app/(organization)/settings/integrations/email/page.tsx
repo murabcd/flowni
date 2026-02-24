@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import { createMetadata } from "@/lib/metadata";
 
 const title = "Email Integration";
-const description = "Send email to this address to create feedback in Flowni.";
+const description = "Send email to this address to create feedback in Portal.";
 
 export const metadata: Metadata = createMetadata({
   title,
@@ -42,7 +42,7 @@ const EmailPage = async () => {
           name="email"
           readOnly
           type="email"
-          value={`${organizationId}@inbound.flowni.ai`}
+          value={`${organizationId}@inbound.portal.ai`}
         />
       </StackCard>
     </>

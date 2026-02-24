@@ -52,7 +52,7 @@ export const OrganizationDetailsForm = ({
         className="bg-background"
         label="Name"
         onChangeText={setName}
-        placeholder="Flowni"
+        placeholder="Portal"
         value={name}
       />
       <Input
@@ -60,7 +60,7 @@ export const OrganizationDetailsForm = ({
         disabled
         label="Slug"
         onChangeText={setSlug}
-        placeholder="flowni"
+        placeholder="portal"
         value={slug}
       />
       <Button disabled={disabled} type="submit">

@@ -36,7 +36,7 @@ export const useRoadmap = create<RoadmapState>()(
         setZoom: (zoom: number) => set(() => ({ zoom })),
       }),
       {
-        name: "flowni-roadmap",
+        name: "portal-roadmap",
       }
     )
   )

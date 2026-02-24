@@ -11,7 +11,7 @@ import { database } from "@/lib/database";
 import { createMetadata } from "@/lib/metadata";
 
 const title = "Integrations";
-const description = "Connect your favorite tools to Flowni.";
+const description = "Connect your favorite tools to Portal.";
 
 export const metadata: Metadata = createMetadata({
   title,
@@ -34,7 +34,7 @@ const IntegrationsSettings = async () => {
   const integrations = [
     {
       title: "Jira",
-      description: "Two-way sync your Jira issues with Flowni features.",
+      description: "Two-way sync your Jira issues with Portal features.",
       icon: "/jira.svg",
       installed: Boolean(jiraInstallation),
       installLink: "/settings/integrations/jira",
@@ -42,9 +42,9 @@ const IntegrationsSettings = async () => {
     },
 
     {
-      title: "Flowni API",
-      description: "Interface directly with Flowni",
-      icon: "/flowni.svg",
+      title: "Portal API",
+      description: "Interface directly with Portal",
+      icon: "/portal.svg",
       installed: true,
       installLink: "/settings/api",
       configureLink: "/settings/api",

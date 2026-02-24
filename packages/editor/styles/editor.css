@@ -119,7 +119,7 @@ div[data-panel-type="error"] {
 }
 
 .node-iframely.ProseMirror-selectednode,
-.node-flowni-feedback-link.ProseMirror-selectednode {
+.node-portal-feedback-link.ProseMirror-selectednode {
   @apply ring ring-primary;
 }
 

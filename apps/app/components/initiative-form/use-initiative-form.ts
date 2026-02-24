@@ -17,7 +17,7 @@ export const useInitiativeForm = create<InitiativeFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:initiative-form",
+      name: "portal:initiative-form",
     }
   )
 );

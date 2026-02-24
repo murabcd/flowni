@@ -17,7 +17,7 @@ export const useGroupForm = create<GroupFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:group-form",
+      name: "portal:group-form",
     }
   )
 );

@@ -1,5 +1,5 @@
 {
-  "name": "flowni",
+  "name": "portal",
   "private": true,
   "scripts": {
     "build": "turbo run build",

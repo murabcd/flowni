@@ -82,7 +82,7 @@ export const CreateOrganizationForm = () => {
       <div className="grid gap-1 text-center text-sm">
         <h1 className="m-0 font-semibold text-lg">Create your organization</h1>
         <p className="m-0 text-muted-foreground">
-          Welcome to Flowni! Please fill in the details below to create your
+          Welcome to Portal! Please fill in the details below to create your
           organization.
         </p>
       </div>

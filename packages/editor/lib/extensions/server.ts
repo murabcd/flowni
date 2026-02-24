@@ -76,7 +76,7 @@ const FileNode = Node.create({
 });
 
 const FeedbackLink = Node.create({
-  name: "flowni-feedback-link",
+  name: "portal-feedback-link",
   atom: true,
   group: "block",
   inline: false,
@@ -95,7 +95,7 @@ const FeedbackLink = Node.create({
   parseHTML() {
     return [
       {
-        tag: 'a[data-type="flowni-feedback-link"]',
+        tag: 'a[data-type="portal-feedback-link"]',
         getAttrs: (element: HTMLElement | string) => ({
           url:
             typeof element === "string"
@@ -110,7 +110,7 @@ const FeedbackLink = Node.create({
     return [
       "a",
       mergeAttributes(HTMLAttributes, {
-        "data-type": "flowni-feedback-link",
+        "data-type": "portal-feedback-link",
         href: `${baseUrl}feedback/${HTMLAttributes.feedbackId}`,
       }),
       HTMLAttributes.feedbackId,

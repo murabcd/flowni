@@ -1,6 +1,6 @@
-<a href="https://flowni.vercel.app">
-  <img alt="Open source product management platform." src="./apps/web/public/preview/flowni.png">
-  <h1 align="center">Flowni</h1>
+<a href="https://portal.vercel.app">
+  <img alt="Open source product management platform." src="./apps/web/public/preview/portal.png">
+  <h1 align="center">Portal</h1>
 </a>
 
 <p align="center">
@@ -29,7 +29,7 @@ This app uses [Openai](https://openai.com/) as the default provider via the [AI 
 
 ## Deploy your own
 
-Flowni is designed to be deployed on Vercel. Create 4 projects (`app`, `api`, `web`, `portal`) and set the Root Directory to the app you are deploying (for example `apps/app`). Then add the required environment variables and deploy.
+Portal is designed to be deployed on Vercel. Create 4 projects (`app`, `api`, `web`, `portal`) and set the Root Directory to the app you are deploying (for example `apps/app`). Then add the required environment variables and deploy.
 
 ## Running locally
 

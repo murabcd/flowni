@@ -35,7 +35,7 @@ export const useFeatureForm = create<FeatureFormState>()(
       setProductId: (productId) => set({ productId }),
     }),
     {
-      name: "flowni:feature-form",
+      name: "portal:feature-form",
     }
   )
 );

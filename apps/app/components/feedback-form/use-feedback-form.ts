@@ -17,7 +17,7 @@ export const useFeedbackForm = create<FeedbackFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:feedback-form",
+      name: "portal:feedback-form",
     }
   )
 );

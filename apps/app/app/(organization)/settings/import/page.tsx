@@ -7,7 +7,7 @@ import { createMetadata } from "@/lib/metadata";
 
 const title = "Import from other apps";
 const description =
-  "Import your feedback, features and components into Flowni.";
+  "Import your feedback, features and components into Portal.";
 
 const sources = [
   {
@@ -28,7 +28,7 @@ const Import = () => (
     <div className="grid gap-2">
       <h1 className="m-0 font-semibold text-4xl tracking-tight">Import</h1>
       <p className="mt-2 mb-0 text-muted-foreground">
-        Import your feedback, features, components and changelogs into Flowni
+        Import your feedback, features, components and changelogs into Portal
       </p>
     </div>
     <StackCard className="divide-y p-0">

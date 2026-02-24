@@ -2,9 +2,9 @@ import { Prose } from "@repo/design-system/components/prose";
 import { MemoizedReactMarkdown } from "@/components/markdown";
 
 const docs = `
-Use the Flowni API to interact with your Flowni data programmatically. The Flowni API is organized around REST. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+Use the Portal API to interact with your Portal data programmatically. The Portal API is organized around REST. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-The Flowni API doesn’t support bulk updates. You can work on only one object per request.
+The Portal API doesn’t support bulk updates. You can work on only one object per request.
 
 ## Getting Started
 
@@ -12,15 +12,15 @@ To get started, create a new API Key in your Settings, then read about how to ma
 
 ## Authentication
 
-You'll need to authenticate your requests to access any of the endpoints in the Flowni API. You can do this by providing your API Key in the \`Authorization\` header.
+You'll need to authenticate your requests to access any of the endpoints in the Portal API. You can do this by providing your API Key in the \`Authorization\` header.
 
 ## Errors
 
-Flowni uses conventional HTTP response codes to indicate the success or failure of an API request. In general:
+Portal uses conventional HTTP response codes to indicate the success or failure of an API request. In general:
 
 - Codes in the \`2xx\` range indicate success.
 - Codes in the \`4xx\` range indicate an error that failed given the information provided (e.g. a required parameter was omitted).
-- Codes in the \`5xx\` range indicate an error with Flowni’s servers (these are rare).
+- Codes in the \`5xx\` range indicate an error with Portal’s servers (these are rare).
 
 ## Endpoints
 
@@ -28,7 +28,7 @@ Flowni uses conventional HTTP response codes to indicate the success or failure 
 
 \`\`\`bash
 curl --request GET \\
-  --url https://api.flowni.ai/changelog \\
+  --url https://api.portal.ai/changelog \\
   --header 'Authorization: Bearer <token>'
 \`\`\`
 
@@ -52,7 +52,7 @@ Example response:
 
 \`\`\`bash
 curl --request POST \\
-  --url https://api.flowni.ai/feature \\
+  --url https://api.portal.ai/feature \\
   --header 'Authorization: Bearer <token>' \\
   --header 'Content-Type: application/json' \\
   --data '{
@@ -71,7 +71,7 @@ curl --request POST \\
 
 \`\`\`bash
 curl --request POST \\
-  --url https://api.flowni.ai/feedback \\
+  --url https://api.portal.ai/feedback \\
   --header 'Authorization: Bearer <token>' \\
   --header 'Content-Type: application/json' \\
   --data '{

@@ -23,7 +23,7 @@ export const LoginForm = () => {
     <div className="grid w-full gap-8 rounded-lg border bg-background p-8 shadow-sm">
       <div className="grid gap-1 text-center">
         <h1 className="font-semibold text-lg tracking-tight">
-          Sign in to Flowni
+          Sign in to Portal
         </h1>
         <p className="text-muted-foreground text-sm">
           Continue with your GitHub account.

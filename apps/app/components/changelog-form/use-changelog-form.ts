@@ -17,7 +17,7 @@ export const useChangelogForm = create<ChangelogFormState>()(
       toggle: () => set((state) => ({ isOpen: !state.isOpen })),
     }),
     {
-      name: "flowni:changelog-form",
+      name: "portal:changelog-form",
     }
   )
 );

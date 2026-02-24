@@ -35,8 +35,8 @@ export const Hero = ({
               transition={{ duration: 1, ease: "easeInOut" }}
             >
               <a
-                aria-label="View latest update on Flowni changelog page"
-                href="https://flowni.flowni.ai/changelog"
+                aria-label="View latest update on Portal changelog page"
+                href="https://portal.portal.ai/changelog"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -71,7 +71,7 @@ export const Hero = ({
               initial={{ opacity: 0, translateY: 16 }}
               transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
             >
-              Flowni is a simple, open source alternative to tools like
+              Portal is a simple, open source alternative to tools like
               Productboard and Cycle. Bring your product team together to
               explore problems, ideate solutions, prioritize features and plan
               roadmaps with the help of AI.
